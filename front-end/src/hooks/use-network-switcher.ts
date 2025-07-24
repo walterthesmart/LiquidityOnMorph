@@ -145,6 +145,16 @@ export function useNetworkSwitcher() {
     return switchToNetwork(11155111);
   }, [switchToNetwork]);
 
+  // Switch to Morph Holesky
+  const switchToMorphHolesky = useCallback(() => {
+    return switchToNetwork(2810);
+  }, [switchToNetwork]);
+
+  // Switch to Morph Mainnet
+  const switchToMorphMainnet = useCallback(() => {
+    return switchToNetwork(2818);
+  }, [switchToNetwork]);
+
   // Switch to local development network
   const switchToLocalhost = useCallback(() => {
     return switchToNetwork(31337);

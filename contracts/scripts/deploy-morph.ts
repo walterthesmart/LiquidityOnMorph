@@ -90,43 +90,111 @@ async function deployToMorph() {
     // Deploy Trading Pair Manager
     console.log("\n📊 Deploying Trading Pair Manager...");
     const TradingPairManager = await ethers.getContractFactory("TradingPairManager");
+
+    // Create the ManagerConfig struct
+    const managerConfig = {
+      defaultFeeRate: 30, // default fee rate
+      defaultLiquidityTarget: ethers.parseEther("100000"), // default liquidity target
+      defaultRebalanceThreshold: 1000, // rebalance threshold
+      maxPairsPerBatch: 10, // max pairs per batch
+      autoLiquidityEnabled: true, // auto liquidity enabled
+      emergencyWithdrawDelay: 86400 // emergency withdraw delay
+    };
+
     const tradingPairManager = await TradingPairManager.deploy(
-      dexAddress,
       ngnAddress,
-      30, // default fee rate
-      ethers.parseEther("100000"), // default liquidity target
-      1000, // rebalance threshold
-      10, // max pairs per batch
-      true, // auto liquidity enabled
-      86400 // emergency withdraw delay
+      dexAddress,
+      factoryAddress,
+      deployer.address, // admin address
+      managerConfig
     );
     await tradingPairManager.waitForDeployment();
     const managerAddress = await tradingPairManager.getAddress();
     deploymentResult.contracts.tradingPairManager = managerAddress;
     console.log("✅ Trading Pair Manager deployed to:", managerAddress);
 
-    // Deploy some sample stock tokens
-    console.log("\n🏢 Deploying Sample Stock Tokens...");
+    // Deploy Nigerian stock tokens
+    console.log("\n🏢 Deploying Nigerian Stock Tokens...");
     const stockTokens = [
-      { name: "Dangote Cement", symbol: "DANGCEM", supply: "1000000" },
-      { name: "MTN Nigeria", symbol: "MTNN", supply: "2000000" },
-      { name: "Zenith Bank", symbol: "ZENITHBANK", supply: "3000000" }
+      // Banking Sector
+      { name: "Zenith Bank", symbol: "ZENITHBANK", supply: "31396000", companyName: "Zenith Bank Plc", sector: "Banking" },
+      { name: "Guaranty Trust Bank", symbol: "GTCO", supply: "29431000", companyName: "Guaranty Trust Holding Company Plc", sector: "Banking" },
+      { name: "Access Bank", symbol: "ACCESS", supply: "35000000", companyName: "Access Holdings Plc", sector: "Banking" },
+      { name: "United Bank for Africa", symbol: "UBA", supply: "33681000", companyName: "United Bank for Africa Plc", sector: "Banking" },
+      { name: "First Bank of Nigeria", symbol: "FBNH", supply: "35895000", companyName: "FBN Holdings Plc", sector: "Banking" },
+      { name: "Stanbic IBTC Bank", symbol: "IBTCCORP", supply: "11000000", companyName: "Stanbic IBTC Holdings Plc", sector: "Banking" },
+      { name: "Fidelity Bank", symbol: "FIDELITYBK", supply: "32000000", companyName: "Fidelity Bank Plc", sector: "Banking" },
+      { name: "Sterling Bank", symbol: "STERLINGNG", supply: "29000000", companyName: "Sterling Financial Holdings Company Plc", sector: "Banking" },
+
+      // Telecommunications
+      { name: "MTN Nigeria", symbol: "MTNN", supply: "20354000", companyName: "MTN Nigeria Communications Plc", sector: "ICT" },
+      { name: "Airtel Africa", symbol: "AIRTELAFRI", supply: "3755000", companyName: "Airtel Africa Plc", sector: "ICT" },
+
+      // Oil & Gas
+      { name: "Seplat Energy", symbol: "SEPLAT", supply: "593000", companyName: "Seplat Energy Plc", sector: "Oil & Gas" },
+      { name: "Total Energies", symbol: "TOTAL", supply: "1000000", companyName: "Total Energies Marketing Nigeria Plc", sector: "Oil & Gas" },
+      { name: "Conoil", symbol: "CONOIL", supply: "1000000", companyName: "Conoil Plc", sector: "Oil & Gas" },
+
+      // Industrial Goods
+      { name: "Dangote Cement", symbol: "DANGCEM", supply: "17040000", companyName: "Dangote Cement Plc", sector: "Industrial Goods" },
+      { name: "BUA Cement", symbol: "BUACEMENT", supply: "17000000", companyName: "BUA Cement Plc", sector: "Industrial Goods" },
+      { name: "Lafarge Africa", symbol: "WAPCO", supply: "18000000", companyName: "Lafarge Africa Plc", sector: "Industrial Goods" },
+
+      // Consumer Goods
+      { name: "Nigerian Breweries", symbol: "NB", supply: "9000000", companyName: "Nigerian Breweries Plc", sector: "Consumer Goods" },
+      { name: "Nestle Nigeria", symbol: "NESTLE", supply: "1500000", companyName: "Nestle Nigeria Plc", sector: "Consumer Goods" },
+      { name: "Unilever Nigeria", symbol: "UNILEVER", supply: "6000000", companyName: "Unilever Nigeria Plc", sector: "Consumer Goods" },
+      { name: "Cadbury Nigeria", symbol: "CADBURY", supply: "2000000", companyName: "Cadbury Nigeria Plc", sector: "Consumer Goods" },
+      { name: "Flour Mills", symbol: "FLOURMILL", supply: "2000000", companyName: "Flour Mills of Nigeria Plc", sector: "Consumer Goods" },
+
+      // Insurance
+      { name: "AIICO Insurance", symbol: "AIICO", supply: "6000000", companyName: "AIICO Insurance Plc", sector: "Insurance" },
+      { name: "Sovereign Trust Insurance", symbol: "SOVRENINS", supply: "2000000", companyName: "Sovereign Trust Insurance Plc", sector: "Insurance" },
+
+      // Agriculture
+      { name: "Livestock Feeds", symbol: "LIVESTOCK", supply: "2000000", companyName: "Livestock Feeds Plc", sector: "Agriculture" },
+      { name: "Okomu Oil Palm", symbol: "OKOMUOIL", supply: "1200000", companyName: "Okomu Oil Palm Company Plc", sector: "Agriculture" },
+
+      // Healthcare
+      { name: "May & Baker", symbol: "MAYBAKER", supply: "1000000", companyName: "May & Baker Nigeria Plc", sector: "Healthcare" },
+      { name: "Fidson Healthcare", symbol: "FIDSON", supply: "4000000", companyName: "Fidson Healthcare Plc", sector: "Healthcare" },
+
+      // Conglomerates
+      { name: "Transnational Corporation", symbol: "TRANSCORP", supply: "40000000", companyName: "Transnational Corporation Plc", sector: "Conglomerates" },
+      { name: "John Holt", symbol: "JOHNHOLT", supply: "500000", companyName: "John Holt Plc", sector: "Conglomerates" },
+
+      // Real Estate
+      { name: "UPDC Real Estate", symbol: "UPDC", supply: "4000000", companyName: "UPDC Real Estate Investment Trust", sector: "Real Estate" },
+
+      // Technology
+      { name: "CWG", symbol: "CWG", supply: "2000000", companyName: "Computer Warehouse Group Plc", sector: "ICT" }
     ];
 
     deploymentResult.contracts.tokens = {};
-    
+
     for (const stock of stockTokens) {
       console.log(`📈 Deploying ${stock.name} (${stock.symbol})...`);
-      const tx = await stockFactory.createStockToken(
+
+      // Create the StockMetadata struct
+      const stockMetadata = {
+        symbol: stock.symbol,
+        companyName: stock.companyName,
+        sector: stock.sector,
+        totalShares: ethers.parseEther(stock.supply),
+        marketCap: ethers.parseEther("1000000000"), // 1B NGN market cap
+        isActive: true,
+        lastUpdated: Math.floor(Date.now() / 1000)
+      };
+
+      const tx = await stockFactory.deployStockToken(
         stock.name,
         stock.symbol,
         ethers.parseEther(stock.supply),
-        stock.name,
-        "Finance", // sector
-        ethers.parseEther("1000000000") // market cap
+        stockMetadata,
+        deployer.address // token admin
       );
       const receipt = await tx.wait();
-      
+
       // Get the token address from the event
       const event = receipt?.logs.find((log: any) => {
         try {
@@ -136,7 +204,7 @@ async function deployToMorph() {
           return false;
         }
       });
-      
+
       if (event) {
         const parsed = stockFactory.interface.parseLog(event);
         const tokenAddress = parsed?.args[1];
