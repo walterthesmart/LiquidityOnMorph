@@ -34,7 +34,7 @@ export const useTokenBalances = () => {
     query: {
       enabled: !!address && !!contractAddresses?.ngnStablecoin,
       retry: 3,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
       staleTime: 30000, // 30 seconds
       gcTime: 5 * 60 * 1000, // 5 minutes
     },
@@ -66,7 +66,7 @@ export const useTokenBalances = () => {
     query: {
       enabled: !!address && !!tokens?.DANGCEM,
       retry: 3,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
       staleTime: 30000, // 30 seconds
       gcTime: 5 * 60 * 1000, // 5 minutes
     },
@@ -80,7 +80,7 @@ export const useTokenBalances = () => {
     query: {
       enabled: !!address && !!tokens?.MTNN,
       retry: 3,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
       staleTime: 30000,
       gcTime: 5 * 60 * 1000,
     },
@@ -94,7 +94,7 @@ export const useTokenBalances = () => {
     query: {
       enabled: !!address && !!tokens?.ZENITHBANK,
       retry: 3,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
       staleTime: 30000,
       gcTime: 5 * 60 * 1000,
     },

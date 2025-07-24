@@ -156,26 +156,26 @@ export default function TestIntegrationPage() {
             </div>
 
             <div>
-              <h3 className="font-semibold mb-2">Bitfinity Network</h3>
+              <h3 className="font-semibold mb-2">Morph Network</h3>
               <ul className="space-y-1 text-sm">
                 <li>
                   <a
-                    href="https://explorer.testnet.bitfinity.network/"
+                    href="https://explorer-holesky.morphl2.io/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-500 hover:underline"
                   >
-                    Bitfinity Testnet Explorer →
+                    Morph Holesky Explorer →
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://faucet.testnet.bitfinity.network/"
+                    href="https://bridge-holesky.morphl2.io/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-500 hover:underline"
                   >
-                    Bitfinity Testnet Faucet →
+                    Morph Holesky Bridge →
                   </a>
                 </li>
               </ul>

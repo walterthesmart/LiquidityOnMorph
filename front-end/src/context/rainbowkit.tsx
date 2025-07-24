@@ -16,7 +16,7 @@ import {
   arbitrum,
   base,
   sepolia,
-} from "wagmi/chains";
+} from "viem/chains";
 import { bitfinityTestnet, bitfinityMainnet, morphHolesky, morphMainnet } from "@/config";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactNode, useEffect, useState } from "react";

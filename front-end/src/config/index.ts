@@ -7,7 +7,7 @@ import {
   arbitrum,
   base,
   sepolia,
-} from "wagmi/chains";
+} from "viem/chains";
 
 export const projectId =
   process.env.NEXT_PUBLIC_PROJECT_ID || "b56e18d47c72ab683b10814fe9495694";

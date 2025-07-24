@@ -5,6 +5,8 @@
  * Checks for missing or misconfigured environment variables
  */
 
+/* eslint-disable @typescript-eslint/no-require-imports, @typescript-eslint/no-unused-vars */
+
 const fs = require('fs');
 const path = require('path');
 
@@ -53,7 +55,7 @@ function checkEnvironmentVariables() {
   }
 
   // Check each category
-  Object.entries(ENV_REQUIREMENTS).forEach(([category, config]) => {
+  Object.entries(ENV_REQUIREMENTS).forEach(([_category, config]) => {
     console.log(`📋 ${config.name}:`);
     
     // Check required variables
@@ -96,7 +98,7 @@ function checkEnvironmentVariables() {
       try {
         new URL(value);
         console.log(`   ✅ ${varName} - Valid URL`);
-      } catch (error) {
+      } catch (_error) {
         console.log(`   ❌ ${varName} - Invalid URL format`);
         hasErrors = true;
       }

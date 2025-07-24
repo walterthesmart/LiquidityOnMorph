@@ -8,7 +8,7 @@ const nextConfig = {
   }),
   // Handle CommonJS modules that need to be transpiled
   transpilePackages: ['@vanilla-extract/sprinkles'],
-  webpack: (config: any) => {
+  webpack: (config: import('webpack').Configuration) => {
     config.experiments = {
       asyncWebAssembly: true,
       topLevelAwait: true,
@@ -16,12 +16,14 @@ const nextConfig = {
     };
 
     // Handle CommonJS modules that are imported as ES modules
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      net: false,
-      tls: false,
-    };
+    if (config.resolve) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
 
     return config;
   },

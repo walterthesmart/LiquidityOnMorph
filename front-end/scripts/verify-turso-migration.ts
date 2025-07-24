@@ -17,7 +17,7 @@ config({ path: path.resolve(__dirname, '../.env') });
 interface VerificationResult {
   table: string;
   count: number;
-  sampleData?: any[];
+  sampleData?: unknown[];
   status: 'success' | 'error';
   error?: string;
 }
@@ -188,7 +188,6 @@ async function verifyTursoMigration(): Promise<void> {
     console.log('=====================================');
     
     const totalErrors = results.filter(r => r.status === 'error').length;
-    const totalSuccess = results.filter(r => r.status === 'success').length;
     
     results.forEach(result => {
       const status = result.status === 'success' ? '✅' : '❌';

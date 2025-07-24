@@ -8,7 +8,6 @@
 import { migrate } from 'drizzle-orm/libsql/migrator';
 import { db } from '../src/db/turso-connection';
 import { stocks, stockPrices, stockPurchases, userStocks } from '../src/db/schema';
-import { sql } from 'drizzle-orm';
 import { config } from 'dotenv';
 import path from 'path';
 

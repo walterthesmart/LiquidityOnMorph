@@ -1,6 +1,6 @@
 /**
- * React hooks for Bitfinity EVM token integration
- * Provides easy access to deployed Nigerian stock tokens on Bitfinity EVM
+ * React hooks for Multi-Network token integration
+ * Provides easy access to deployed Nigerian stock tokens on Morph, Sepolia, and other supported networks
  */
 
 import { useState, useEffect, useMemo, useCallback } from "react";

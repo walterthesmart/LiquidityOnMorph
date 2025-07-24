@@ -1,8 +1,8 @@
 /**
- * Bitfinity EVM Contract Service
+ * Multi-Chain Contract Service
  *
  * This service handles interactions with Nigerian Stock Token contracts
- * deployed on Bitfinity EVM, replacing the previous Hedera SDK integration.
+ * deployed on multiple networks including Morph, Sepolia, and legacy Bitfinity EVM.
  */
 
 import { ethers } from "ethers";
@@ -53,15 +53,36 @@ const FACTORY_ABI = [
 ];
 
 // Network configurations
-const BITFINITY_NETWORKS = {
-  testnet: {
+const SUPPORTED_NETWORKS = {
+  morph_holesky: {
+    chainId: 2810,
+    name: "Morph Holesky Testnet",
+    rpcUrl: "https://rpc-quicknode-holesky.morphl2.io",
+    explorerUrl: "https://explorer-holesky.morphl2.io",
+    factoryAddress: "0xC81EE0bE153a694A90D45af32fcC66CF0C6c9296",
+  },
+  morph_mainnet: {
+    chainId: 2818,
+    name: "Morph Mainnet",
+    rpcUrl: "https://rpc-quicknode.morphl2.io",
+    explorerUrl: "https://explorer.morphl2.io",
+    factoryAddress: "", // To be updated when deployed
+  },
+  sepolia: {
+    chainId: 11155111,
+    name: "Ethereum Sepolia Testnet",
+    rpcUrl: "https://sepolia.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
+    explorerUrl: "https://sepolia.etherscan.io",
+    factoryAddress: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  },
+  bitfinity_testnet: {
     chainId: 355113,
     name: "Bitfinity Testnet",
     rpcUrl: "https://testnet.bitfinity.network",
     explorerUrl: "https://explorer.testnet.bitfinity.network",
     factoryAddress: process.env.NEXT_PUBLIC_FACTORY_ADDRESS_TESTNET || "",
   },
-  mainnet: {
+  bitfinity_mainnet: {
     chainId: 355110,
     name: "Bitfinity Mainnet",
     rpcUrl: "https://mainnet.bitfinity.network",
@@ -69,6 +90,8 @@ const BITFINITY_NETWORKS = {
     factoryAddress: process.env.NEXT_PUBLIC_FACTORY_ADDRESS_MAINNET || "",
   },
 };
+
+
 
 export interface StockMetadata {
   symbol: string;
@@ -89,13 +112,13 @@ export interface TokenInfo {
   metadata: StockMetadata;
 }
 
-export class BitfinityContractService {
+export class MultiChainContractService {
   private provider: ethers.Provider | null = null;
   private signer: ethers.Signer | null = null;
-  private network: "testnet" | "mainnet" = "testnet";
+  private network: keyof typeof SUPPORTED_NETWORKS = "morph_holesky";
   private factoryContract: ethers.Contract | null = null;
 
-  constructor(network: "testnet" | "mainnet" = "testnet") {
+  constructor(network: keyof typeof SUPPORTED_NETWORKS = "morph_holesky") {
     this.network = network;
     this.initializeProvider();
   }
@@ -105,7 +128,7 @@ export class BitfinityContractService {
    */
   private initializeProvider() {
     try {
-      const networkConfig = BITFINITY_NETWORKS[this.network];
+      const networkConfig = SUPPORTED_NETWORKS[this.network];
       this.provider = new ethers.JsonRpcProvider(networkConfig.rpcUrl);
 
       if (networkConfig.factoryAddress) {
@@ -116,8 +139,23 @@ export class BitfinityContractService {
         );
       }
     } catch (error) {
-      console.error("Failed to initialize Bitfinity provider:", error);
+      console.error("Failed to initialize multi-chain provider:", error);
     }
+  }
+
+  /**
+   * Switch to a different network
+   */
+  switchNetwork(network: keyof typeof SUPPORTED_NETWORKS) {
+    this.network = network;
+    this.initializeProvider();
+  }
+
+  /**
+   * Get current network configuration
+   */
+  getCurrentNetwork() {
+    return SUPPORTED_NETWORKS[this.network];
   }
 
   /**
@@ -129,8 +167,8 @@ export class BitfinityContractService {
         const provider = new ethers.BrowserProvider(window.ethereum);
         await provider.send("eth_requestAccounts", []);
 
-        // Switch to Bitfinity network if needed
-        await this.switchToBitfinityNetwork();
+        // Switch to current network if needed
+        await this.switchToCurrentNetwork();
 
         this.signer = await provider.getSigner();
 
@@ -157,12 +195,12 @@ export class BitfinityContractService {
   }
 
   /**
-   * Switch to Bitfinity network
+   * Switch to current network
    */
-  private async switchToBitfinityNetwork(): Promise<void> {
+  private async switchToCurrentNetwork(): Promise<void> {
     if (!window.ethereum) return;
 
-    const networkConfig = BITFINITY_NETWORKS[this.network];
+    const networkConfig = SUPPORTED_NETWORKS[this.network];
 
     try {
       await window.ethereum.request({
@@ -407,23 +445,12 @@ export class BitfinityContractService {
     }
   }
 
-  /**
-   * Get current network configuration
-   */
-  getNetworkConfig() {
-    return BITFINITY_NETWORKS[this.network];
-  }
 
-  /**
-   * Switch network
-   */
-  switchNetwork(network: "testnet" | "mainnet") {
-    this.network = network;
-    this.initializeProvider();
-  }
 }
 
-// Export singleton instance
-export const bitfinityService = new BitfinityContractService(
-  process.env.NODE_ENV === "production" ? "mainnet" : "testnet",
-);
+// Backward compatibility
+export const BitfinityContractService = MultiChainContractService;
+
+// Export singleton instances
+export const multiChainService = new MultiChainContractService("morph_holesky");
+export const bitfinityService = new MultiChainContractService("bitfinity_testnet");

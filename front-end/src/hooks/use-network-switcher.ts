@@ -173,8 +173,8 @@ export function useNetworkSwitcher() {
 
   // Get recommended network for new users
   const getRecommendedNetwork = useCallback((): NetworkInfo => {
-    // Recommend Bitfinity Testnet for new users
-    return getNetworkInfo(355113);
+    // Recommend Morph Holesky Testnet for new users
+    return getNetworkInfo(2810);
   }, [getNetworkInfo]);
 
   // Update state when network or connection changes
@@ -217,6 +217,8 @@ export function useNetworkSwitcher() {
     switchToNetwork,
     switchToBitfinityTestnet,
     switchToSepolia,
+    switchToMorphHolesky,
+    switchToMorphMainnet,
     switchToLocalhost,
 
     // Utilities

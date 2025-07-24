@@ -91,7 +91,7 @@ async function testPriceChartData(): Promise<void> {
         .where(eq(stockPrices.symbol, 'INVALID_SYMBOL'))
         .orderBy(stockPrices.time);
       console.log(`✅ Invalid symbol returned ${invalidData.length} records (should be 0)`);
-    } catch (error) {
+    } catch {
       console.log('❌ Invalid symbol test failed');
     }
     console.log('');

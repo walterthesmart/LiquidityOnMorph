@@ -1,6 +1,7 @@
 /**
- * Bitfinity EVM Configuration
+ * Multi-Network Configuration
  * Network settings and contract addresses for Nigerian Stock Exchange tokens
+ * Supports Morph, Sepolia, and legacy Bitfinity networks
  */
 
 export interface NetworkConfig {
