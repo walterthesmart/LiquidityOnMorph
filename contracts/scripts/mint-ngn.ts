@@ -62,6 +62,7 @@ async function main(): Promise<void> {
   } catch (error) {
     console.error(`❌ Could not load deployment file: ${deploymentFile}`);
     console.error("Please ensure the NGN DEX system is deployed first.");
+    console.error("Error details:", error);
     process.exit(1);
   }
 
