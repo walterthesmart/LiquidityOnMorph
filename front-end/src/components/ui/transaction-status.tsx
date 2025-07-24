@@ -50,12 +50,12 @@ export const TransactionStatus: React.FC<TransactionStatusProps> = ({
   const config = getStatusConfig();
 
   return (
-    <Badge 
+    <Badge
       variant={config.variant}
       className={cn(
         "flex items-center gap-1 text-xs font-medium",
         config.className,
-        className
+        className,
       )}
     >
       {config.icon}

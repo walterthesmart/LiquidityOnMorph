@@ -15,13 +15,8 @@ import { RefreshCw, Loader2, AlertCircle, CheckCircle } from "lucide-react";
 export const TokenBalanceDebug: React.FC = () => {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
-  const { 
-    tokenBalances, 
-    isLoading, 
-    error, 
-    refreshBalances, 
-    hasBalances 
-  } = useTokenBalances();
+  const { tokenBalances, isLoading, error, refreshBalances, hasBalances } =
+    useTokenBalances();
 
   if (!isConnected) {
     return (
@@ -33,7 +28,9 @@ export const TokenBalanceDebug: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-600">Please connect your wallet to test token balances.</p>
+          <p className="text-gray-600">
+            Please connect your wallet to test token balances.
+          </p>
         </CardContent>
       </Card>
     );
@@ -67,7 +64,9 @@ export const TokenBalanceDebug: React.FC = () => {
         <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
           <div>
             <p className="text-sm font-medium text-gray-700">Wallet Address:</p>
-            <p className="text-xs font-mono text-gray-600 break-all">{address}</p>
+            <p className="text-xs font-mono text-gray-600 break-all">
+              {address}
+            </p>
           </div>
           <div>
             <p className="text-sm font-medium text-gray-700">Chain ID:</p>
@@ -83,18 +82,16 @@ export const TokenBalanceDebug: React.FC = () => {
           <Badge variant={hasBalances ? "default" : "secondary"}>
             {hasBalances ? `${tokenBalances.length} tokens` : "No balances"}
           </Badge>
-          {error && (
-            <Badge variant="destructive">
-              Error: {error}
-            </Badge>
-          )}
+          {error && <Badge variant="destructive">Error: {error}</Badge>}
         </div>
 
         {/* Token Balances */}
         <div className="space-y-2">
           <h3 className="text-lg font-semibold">Token Balances</h3>
           {tokenBalances.length === 0 ? (
-            <p className="text-gray-500 italic">No token balances loaded yet.</p>
+            <p className="text-gray-500 italic">
+              No token balances loaded yet.
+            </p>
           ) : (
             <div className="grid gap-2">
               {tokenBalances.map((token) => (
@@ -140,15 +137,15 @@ export const TokenBalanceDebug: React.FC = () => {
                 error,
                 hasBalances,
                 tokenCount: tokenBalances.length,
-                tokenBalances: tokenBalances.map(token => ({
+                tokenBalances: tokenBalances.map((token) => ({
                   symbol: token.symbol,
                   balance: token.balance,
                   address: token.address,
-                  isStablecoin: token.isStablecoin
-                }))
+                  isStablecoin: token.isStablecoin,
+                })),
               },
               null,
-              2
+              2,
             )}
           </pre>
         </details>

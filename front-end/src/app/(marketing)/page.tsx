@@ -109,8 +109,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-
-
       {/* Features Section */}
       <FeaturesSection />
 

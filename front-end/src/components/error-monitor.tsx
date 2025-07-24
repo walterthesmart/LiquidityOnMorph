@@ -33,7 +33,8 @@ export function ErrorMonitor() {
         lineno?: number;
         colno?: number;
       };
-      if (!errorEvent.error && !errorEvent.message && !errorEvent.filename) return;
+      if (!errorEvent.error && !errorEvent.message && !errorEvent.filename)
+        return;
 
       errorEvents.push({
         id: Date.now().toString(),
@@ -55,7 +56,7 @@ export function ErrorMonitor() {
       const target = event.target as HTMLElement;
       if (!target || !target.tagName) return;
 
-      const src = 
+      const src =
         (target as HTMLImageElement).src ||
         (target as HTMLLinkElement).href ||
         (target as HTMLScriptElement).src ||
@@ -83,7 +84,10 @@ export function ErrorMonitor() {
         id: Date.now().toString(),
         timestamp: new Date().toISOString(),
         type: "promise",
-        message: event.reason instanceof Error ? event.reason.message : String(event.reason),
+        message:
+          event.reason instanceof Error
+            ? event.reason.message
+            : String(event.reason),
         details: {
           reason: event.reason,
         },
@@ -107,11 +111,16 @@ export function ErrorMonitor() {
 
   const getErrorTypeColor = (type: ErrorEvent["type"]) => {
     switch (type) {
-      case "global": return "destructive";
-      case "resource": return "secondary";
-      case "promise": return "outline";
-      case "network": return "default";
-      default: return "default";
+      case "global":
+        return "destructive";
+      case "resource":
+        return "secondary";
+      case "promise":
+        return "outline";
+      case "network":
+        return "default";
+      default:
+        return "default";
     }
   };
 
@@ -140,7 +149,7 @@ export function ErrorMonitor() {
             Click &quot;Start Monitoring&quot; to capture real-time errors
           </p>
         )}
-        
+
         {errors.length === 0 && isMonitoring && (
           <p className="text-green-600">No errors detected ✅</p>
         )}

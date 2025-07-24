@@ -59,7 +59,7 @@ const StockNGNTrader: React.FC<StockNGNTraderProps> = ({ className = "" }) => {
   const dexAddress = chainId ? getStockNGNDEXAddress(chainId) : "";
   const ngnAddress = chainId ? getNGNStablecoinAddress(chainId) : "";
 
-  // Get all available stock tokens
+  // Get all available stock tokens (for future use)
   const { data: stockTokens } = useReadContract({
     address: dexAddress as `0x${string}`,
     abi: StockNGNDEXABI,
@@ -68,6 +68,9 @@ const StockNGNTrader: React.FC<StockNGNTraderProps> = ({ className = "" }) => {
       enabled: !!dexAddress,
     },
   }) as { data: string[] | undefined };
+
+  // Suppress unused variable warning - stockTokens will be used for dynamic stock selection in future
+  void stockTokens;
 
   // Get trading pair info for selected stock (currently unused but may be needed for future features)
   // const { data: tradingPair } = useReadContract({

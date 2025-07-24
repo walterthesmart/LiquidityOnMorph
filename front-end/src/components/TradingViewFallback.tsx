@@ -4,19 +4,24 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  BarChart3, 
+import {
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
   AlertTriangle,
   RefreshCw,
-  ExternalLink 
+  ExternalLink,
 } from "lucide-react";
 
 interface TradingViewFallbackProps {
   symbol: string;
   title?: string;
-  type?: "chart" | "technical-analysis" | "symbol-info" | "company-profile" | "timeline";
+  type?:
+    | "chart"
+    | "technical-analysis"
+    | "symbol-info"
+    | "company-profile"
+    | "timeline";
   onRetry?: () => void;
   className?: string;
 }
@@ -89,30 +94,26 @@ export const TradingViewFallback: React.FC<TradingViewFallbackProps> = ({
   return (
     <Card className={`w-full ${className}`}>
       <CardHeader className="text-center">
-        <div className="flex justify-center mb-2">
-          {content.icon}
-        </div>
+        <div className="flex justify-center mb-2">{content.icon}</div>
         <CardTitle className="text-lg">{content.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <Alert>
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
-            Chart widget temporarily unavailable. This may be due to ad blockers, 
-            network restrictions, or external service issues.
+            Chart widget temporarily unavailable. This may be due to ad
+            blockers, network restrictions, or external service issues.
           </AlertDescription>
         </Alert>
 
         <div className="text-center space-y-3">
-          <p className="text-sm text-muted-foreground">
-            {content.description}
-          </p>
-          
+          <p className="text-sm text-muted-foreground">{content.description}</p>
+
           <div className="flex flex-col sm:flex-row gap-2 justify-center">
             {onRetry && (
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={onRetry}
                 className="flex items-center gap-2"
               >
@@ -120,10 +121,10 @@ export const TradingViewFallback: React.FC<TradingViewFallbackProps> = ({
                 Retry Loading
               </Button>
             )}
-            
-            <Button 
-              variant="default" 
-              size="sm" 
+
+            <Button
+              variant="default"
+              size="sm"
               onClick={handleOpenTradingView}
               className="flex items-center gap-2"
             >
@@ -160,8 +161,9 @@ export const TradingViewFallback: React.FC<TradingViewFallbackProps> = ({
  */
 export const useTradingViewEnabled = () => {
   const isEnabled = process.env.NEXT_PUBLIC_ENABLE_TRADINGVIEW !== "false";
-  const fallbackEnabled = process.env.NEXT_PUBLIC_TRADINGVIEW_FALLBACK !== "false";
-  
+  const fallbackEnabled =
+    process.env.NEXT_PUBLIC_TRADINGVIEW_FALLBACK !== "false";
+
   return {
     isEnabled,
     fallbackEnabled,

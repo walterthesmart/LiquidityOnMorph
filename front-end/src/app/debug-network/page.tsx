@@ -9,7 +9,9 @@ export default function DebugNetworkPage() {
 
         {/* Wallet Connection Test */}
         <div>
-          <h2 className="text-2xl font-semibold mb-4">Wallet Connection Test</h2>
+          <h2 className="text-2xl font-semibold mb-4">
+            Wallet Connection Test
+          </h2>
           <WalletStatus />
         </div>
 

@@ -14,12 +14,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  RefreshCw, 
+import {
+  TrendingUp,
+  TrendingDown,
+  RefreshCw,
   BarChart3,
-  Activity
+  Activity,
 } from "lucide-react";
 import { useReadContract, useChainId } from "wagmi";
 import { StockNGNDEXABI, getStockNGNDEXAddress } from "../../abis";
@@ -38,10 +38,12 @@ interface OrderLevel {
 }
 
 // Mock data for demonstration - in production this would come from smart contracts or indexer
-const generateMockOrderBook = (currentPrice: number): { bids: OrderLevel[], asks: OrderLevel[] } => {
+const generateMockOrderBook = (
+  currentPrice: number,
+): { bids: OrderLevel[]; asks: OrderLevel[] } => {
   const bids: OrderLevel[] = [];
   const asks: OrderLevel[] = [];
-  
+
   // Generate bid orders (buy orders) below current price
   let totalBidAmount = 0;
   for (let i = 0; i < 10; i++) {
@@ -71,23 +73,29 @@ const generateMockOrderBook = (currentPrice: number): { bids: OrderLevel[], asks
   }
 
   // Calculate percentages for depth visualization
-  const maxBidTotal = Math.max(...bids.map(b => b.total));
-  const maxAskTotal = Math.max(...asks.map(a => a.total));
-  
-  bids.forEach(bid => {
+  const maxBidTotal = Math.max(...bids.map((b) => b.total));
+  const maxAskTotal = Math.max(...asks.map((a) => a.total));
+
+  bids.forEach((bid) => {
     bid.percentage = (bid.total / maxBidTotal) * 100;
   });
-  
-  asks.forEach(ask => {
+
+  asks.forEach((ask) => {
     ask.percentage = (ask.total / maxAskTotal) * 100;
   });
 
   return { bids, asks };
 };
 
-export default function OrderBook({ stockToken, className = "" }: OrderBookProps) {
+export default function OrderBook({
+  stockToken,
+  className = "",
+}: OrderBookProps) {
   const chainId = useChainId();
-  const [orderBook, setOrderBook] = useState<{ bids: OrderLevel[], asks: OrderLevel[] }>({ bids: [], asks: [] });
+  const [orderBook, setOrderBook] = useState<{
+    bids: OrderLevel[];
+    asks: OrderLevel[];
+  }>({ bids: [], asks: [] });
   const [isLoading, setIsLoading] = useState(false);
 
   const dexAddress = chainId ? getStockNGNDEXAddress(chainId) : "";
@@ -107,7 +115,9 @@ export default function OrderBook({ stockToken, className = "" }: OrderBookProps
   // Generate mock order book data based on current price
   useEffect(() => {
     if (currentPrice) {
-      const price = currentPrice ? Number(formatEther(currentPrice as bigint)) : 0;
+      const price = currentPrice
+        ? Number(formatEther(currentPrice as bigint))
+        : 0;
       const mockData = generateMockOrderBook(price);
       setOrderBook(mockData);
     }
@@ -149,8 +159,15 @@ export default function OrderBook({ stockToken, className = "" }: OrderBookProps
             <BarChart3 className="h-5 w-5 mr-2" />
             Order Book
           </div>
-          <Button variant="outline" size="sm" onClick={refreshOrderBook} disabled={isLoading}>
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={refreshOrderBook}
+            disabled={isLoading}
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+            />
           </Button>
         </CardTitle>
       </CardHeader>
@@ -169,23 +186,34 @@ export default function OrderBook({ stockToken, className = "" }: OrderBookProps
           <div className="px-4 py-2">
             <div className="flex items-center mb-2">
               <TrendingDown className="h-4 w-4 text-red-500 mr-1" />
-              <span className="text-sm font-medium text-red-600">Sell Orders</span>
+              <span className="text-sm font-medium text-red-600">
+                Sell Orders
+              </span>
             </div>
             <div className="space-y-1">
-              {orderBook.asks.slice().reverse().map((ask, index) => (
-                <div key={index} className="relative">
-                  {/* Depth bar */}
-                  <div 
-                    className="absolute inset-0 bg-red-50 opacity-60"
-                    style={{ width: `${ask.percentage}%` }}
-                  />
-                  <div className="relative grid grid-cols-3 text-xs py-1 hover:bg-red-50 cursor-pointer">
-                    <span className="text-red-600 font-medium">{formatPrice(ask.price)}</span>
-                    <span className="text-right">{formatAmount(ask.amount)}</span>
-                    <span className="text-right text-gray-600">{formatAmount(ask.total)}</span>
+              {orderBook.asks
+                .slice()
+                .reverse()
+                .map((ask, index) => (
+                  <div key={index} className="relative">
+                    {/* Depth bar */}
+                    <div
+                      className="absolute inset-0 bg-red-50 opacity-60"
+                      style={{ width: `${ask.percentage}%` }}
+                    />
+                    <div className="relative grid grid-cols-3 text-xs py-1 hover:bg-red-50 cursor-pointer">
+                      <span className="text-red-600 font-medium">
+                        {formatPrice(ask.price)}
+                      </span>
+                      <span className="text-right">
+                        {formatAmount(ask.amount)}
+                      </span>
+                      <span className="text-right text-gray-600">
+                        {formatAmount(ask.total)}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
 
@@ -193,7 +221,9 @@ export default function OrderBook({ stockToken, className = "" }: OrderBookProps
           <div className="px-4 py-3 bg-gray-100 border-y">
             <div className="flex items-center justify-center">
               <Badge variant="outline" className="text-lg font-bold">
-                {currentPrice ? formatPrice(Number(formatEther(currentPrice as bigint))) : "Loading..."}
+                {currentPrice
+                  ? formatPrice(Number(formatEther(currentPrice as bigint)))
+                  : "Loading..."}
               </Badge>
             </div>
             <div className="text-center text-xs text-gray-500 mt-1">
@@ -205,20 +235,28 @@ export default function OrderBook({ stockToken, className = "" }: OrderBookProps
           <div className="px-4 py-2">
             <div className="flex items-center mb-2">
               <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-              <span className="text-sm font-medium text-green-600">Buy Orders</span>
+              <span className="text-sm font-medium text-green-600">
+                Buy Orders
+              </span>
             </div>
             <div className="space-y-1">
               {orderBook.bids.map((bid, index) => (
                 <div key={index} className="relative">
                   {/* Depth bar */}
-                  <div 
+                  <div
                     className="absolute inset-0 bg-green-50 opacity-60"
                     style={{ width: `${bid.percentage}%` }}
                   />
                   <div className="relative grid grid-cols-3 text-xs py-1 hover:bg-green-50 cursor-pointer">
-                    <span className="text-green-600 font-medium">{formatPrice(bid.price)}</span>
-                    <span className="text-right">{formatAmount(bid.amount)}</span>
-                    <span className="text-right text-gray-600">{formatAmount(bid.total)}</span>
+                    <span className="text-green-600 font-medium">
+                      {formatPrice(bid.price)}
+                    </span>
+                    <span className="text-right">
+                      {formatAmount(bid.amount)}
+                    </span>
+                    <span className="text-right text-gray-600">
+                      {formatAmount(bid.total)}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -233,13 +271,17 @@ export default function OrderBook({ stockToken, className = "" }: OrderBookProps
             <div>
               <span className="text-gray-600">Bid Total:</span>
               <span className="ml-2 font-medium text-green-600">
-                {formatAmount(orderBook.bids.reduce((sum, bid) => sum + bid.amount, 0))}
+                {formatAmount(
+                  orderBook.bids.reduce((sum, bid) => sum + bid.amount, 0),
+                )}
               </span>
             </div>
             <div>
               <span className="text-gray-600">Ask Total:</span>
               <span className="ml-2 font-medium text-red-600">
-                {formatAmount(orderBook.asks.reduce((sum, ask) => sum + ask.amount, 0))}
+                {formatAmount(
+                  orderBook.asks.reduce((sum, ask) => sum + ask.amount, 0),
+                )}
               </span>
             </div>
           </div>

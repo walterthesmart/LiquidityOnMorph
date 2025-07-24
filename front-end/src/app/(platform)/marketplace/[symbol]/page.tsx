@@ -67,7 +67,6 @@ export default async function StockDetail({
   }
   return (
     <div className="min-h-screen bg-gray-50/30">
-
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 max-w-7xl">
         {/* Header Section with Symbol Info */}
         <div className="mb-8">
@@ -115,7 +114,11 @@ export default async function StockDetail({
             {/* Right: Stock Information & Quick Trading */}
             <div className="lg:w-96 space-y-6">
               {/* Quick Trading Widget */}
-              <Suspense fallback={<div className="h-64 bg-white rounded-lg shadow-sm animate-pulse" />}>
+              <Suspense
+                fallback={
+                  <div className="h-64 bg-white rounded-lg shadow-sm animate-pulse" />
+                }
+              >
                 <QuickTradingWidget
                   stockToken={`0x${symbol.toLowerCase()}`} // This would need to be the actual token address
                   stockSymbol={stockSymbol.symbol}
@@ -141,11 +144,15 @@ export default async function StockDetail({
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Sector:</span>
-                      <span className="font-medium">{stockSymbol.sector || "N/A"}</span>
+                      <span className="font-medium">
+                        {stockSymbol.sector || "N/A"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Market Cap:</span>
-                      <span className="font-medium">{stockSymbol.marketCap || "N/A"}</span>
+                      <span className="font-medium">
+                        {stockSymbol.marketCap || "N/A"}
+                      </span>
                     </div>
                   </div>
                 </CardContent>
@@ -256,13 +263,19 @@ export default async function StockDetail({
                   <div className="space-y-4">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Current Price:</span>
-                      <span className="font-medium">₦{stockSymbol.price?.toFixed(2) || "N/A"}</span>
+                      <span className="font-medium">
+                        ₦{stockSymbol.price?.toFixed(2) || "N/A"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Change:</span>
-                      <span className={`font-medium flex items-center ${
-                        (stockSymbol.change || 0) >= 0 ? "text-green-600" : "text-red-600"
-                      }`}>
+                      <span
+                        className={`font-medium flex items-center ${
+                          (stockSymbol.change || 0) >= 0
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
                         {(stockSymbol.change || 0) >= 0 ? (
                           <ArrowUp className="h-4 w-4 mr-1" />
                         ) : (
@@ -273,12 +286,16 @@ export default async function StockDetail({
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Volume:</span>
-                      <span className="font-medium">{stockSymbol.volume?.toLocaleString() || "N/A"}</span>
+                      <span className="font-medium">
+                        {stockSymbol.volume?.toLocaleString() || "N/A"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Last Updated:</span>
                       <span className="font-medium text-sm">
-                        {stockSymbol.lastUpdated ? new Date(stockSymbol.lastUpdated).toLocaleString() : "N/A"}
+                        {stockSymbol.lastUpdated
+                          ? new Date(stockSymbol.lastUpdated).toLocaleString()
+                          : "N/A"}
                       </span>
                     </div>
                   </div>
@@ -295,16 +312,21 @@ export default async function StockDetail({
                     <div>
                       <span className="text-gray-600 block">Description:</span>
                       <p className="text-sm mt-1">
-                        {stockSymbol.description || `${stockSymbol.name} is a leading company in the ${stockSymbol.sector || "Nigerian"} sector.`}
+                        {stockSymbol.description ||
+                          `${stockSymbol.name} is a leading company in the ${stockSymbol.sector || "Nigerian"} sector.`}
                       </p>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Industry:</span>
-                      <span className="font-medium">{stockSymbol.industry || stockSymbol.sector || "N/A"}</span>
+                      <span className="font-medium">
+                        {stockSymbol.industry || stockSymbol.sector || "N/A"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Exchange:</span>
-                      <span className="font-medium">Nigerian Stock Exchange (NGX)</span>
+                      <span className="font-medium">
+                        Nigerian Stock Exchange (NGX)
+                      </span>
                     </div>
                   </div>
                 </CardContent>
@@ -323,16 +345,21 @@ export default async function StockDetail({
                     <div className="p-4 bg-blue-50 rounded-lg">
                       <div className="flex items-center">
                         <Info className="h-5 w-5 text-blue-600 mr-2" />
-                        <span className="text-blue-800 font-medium">Trading Status</span>
+                        <span className="text-blue-800 font-medium">
+                          Trading Status
+                        </span>
                       </div>
                       <p className="text-blue-700 text-sm mt-1">
-                        This stock is available for trading on the Nigerian Stock Exchange.
+                        This stock is available for trading on the Nigerian
+                        Stock Exchange.
                       </p>
                     </div>
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Trading Hours:</span>
-                        <span className="font-medium">9:30 AM - 2:30 PM WAT</span>
+                        <span className="font-medium">
+                          9:30 AM - 2:30 PM WAT
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Currency:</span>
@@ -357,7 +384,9 @@ export default async function StockDetail({
                     <div className="p-4 bg-green-50 rounded-lg">
                       <div className="flex items-center">
                         <Info className="h-5 w-5 text-green-600 mr-2" />
-                        <span className="text-green-800 font-medium">Market Status</span>
+                        <span className="text-green-800 font-medium">
+                          Market Status
+                        </span>
                       </div>
                       <p className="text-green-700 text-sm mt-1">
                         Nigerian Stock Exchange is currently open for trading.
@@ -366,15 +395,21 @@ export default async function StockDetail({
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Market:</span>
-                        <span className="font-medium">Nigerian Stock Exchange</span>
+                        <span className="font-medium">
+                          Nigerian Stock Exchange
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">Listing Date:</span>
-                        <span className="font-medium">{stockSymbol.listingDate || "N/A"}</span>
+                        <span className="font-medium">
+                          {stockSymbol.listingDate || "N/A"}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-gray-600">ISIN:</span>
-                        <span className="font-medium">{stockSymbol.isin || "N/A"}</span>
+                        <span className="font-medium">
+                          {stockSymbol.isin || "N/A"}
+                        </span>
                       </div>
                     </div>
                   </div>

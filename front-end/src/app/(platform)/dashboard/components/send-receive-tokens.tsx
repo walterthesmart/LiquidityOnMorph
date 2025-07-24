@@ -10,12 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -69,7 +64,11 @@ export const SendReceiveTokens: React.FC = () => {
   const { writeContractAsync } = useWriteContract();
 
   // Use token balances hook
-  const { tokenBalances, isLoading: balancesLoading, refreshBalances } = useTokenBalances();
+  const {
+    tokenBalances,
+    isLoading: balancesLoading,
+    refreshBalances,
+  } = useTokenBalances();
 
   // State management
   const [activeTab, setActiveTab] = useState("send");
@@ -81,12 +80,14 @@ export const SendReceiveTokens: React.FC = () => {
   const [addressCopied, setAddressCopied] = useState(false);
 
   // Get contract addresses for current network
-  const contractAddresses = chainId ? CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES] : null;
+  const contractAddresses = chainId
+    ? CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES]
+    : null;
 
   // Copy address to clipboard
   const copyAddress = useCallback(async () => {
     if (!address) return;
-    
+
     try {
       await navigator.clipboard.writeText(address);
       setAddressCopied(true);
@@ -103,24 +104,29 @@ export const SendReceiveTokens: React.FC = () => {
       toast.error("Please select a token to send");
       return false;
     }
-    
+
     if (!recipientAddress) {
       toast.error("Please enter recipient address");
       return false;
     }
-    
+
     if (!isAddress(recipientAddress)) {
       toast.error("Invalid recipient address");
       return false;
     }
-    
+
     if (!sendAmount || parseFloat(sendAmount) <= 0) {
       toast.error("Please enter a valid amount");
       return false;
     }
 
-    const selectedTokenBalance = tokenBalances.find(t => t.symbol === selectedToken);
-    if (selectedTokenBalance && parseFloat(sendAmount) > parseFloat(selectedTokenBalance.balance)) {
+    const selectedTokenBalance = tokenBalances.find(
+      (t) => t.symbol === selectedToken,
+    );
+    if (
+      selectedTokenBalance &&
+      parseFloat(sendAmount) > parseFloat(selectedTokenBalance.balance)
+    ) {
       toast.error("Insufficient balance");
       return false;
     }
@@ -133,9 +139,11 @@ export const SendReceiveTokens: React.FC = () => {
     if (!validateSendForm() || !address || !contractAddresses) return;
 
     setIsLoading(true);
-    
+
     try {
-      const selectedTokenData = tokenBalances.find(t => t.symbol === selectedToken);
+      const selectedTokenData = tokenBalances.find(
+        (t) => t.symbol === selectedToken,
+      );
       if (!selectedTokenData) throw new Error("Token not found");
 
       const amount = parseEther(sendAmount);
@@ -170,28 +178,38 @@ export const SendReceiveTokens: React.FC = () => {
         status: "pending",
       };
 
-      setTransactions(prev => [newTransaction, ...prev]);
-      
+      setTransactions((prev) => [newTransaction, ...prev]);
+
       toast.success("Transaction submitted successfully!");
-      
+
       // Reset form
       setSelectedToken("");
       setRecipientAddress("");
       setSendAmount("");
-      
+
       // Reload balances
       setTimeout(() => {
         refreshBalances();
       }, 2000);
-
     } catch (error: unknown) {
       console.error("Send transaction failed:", error);
-      const errorMessage = error instanceof Error ? error.message : "Transaction failed";
+      const errorMessage =
+        error instanceof Error ? error.message : "Transaction failed";
       toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
-  }, [validateSendForm, address, contractAddresses, tokenBalances, selectedToken, sendAmount, recipientAddress, writeContractAsync, refreshBalances]);
+  }, [
+    validateSendForm,
+    address,
+    contractAddresses,
+    tokenBalances,
+    selectedToken,
+    sendAmount,
+    recipientAddress,
+    writeContractAsync,
+    refreshBalances,
+  ]);
 
   if (!isConnected) {
     return (
@@ -208,7 +226,9 @@ export const SendReceiveTokens: React.FC = () => {
         <CardContent>
           <div className="text-center py-8">
             <AlertCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">Please connect your wallet to continue</p>
+            <p className="text-gray-600">
+              Please connect your wallet to continue
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -304,7 +324,9 @@ export const SendReceiveTokens: React.FC = () => {
                   }`}
                 />
                 {recipientAddress && !isAddress(recipientAddress) && (
-                  <p className="text-sm text-red-500">Invalid Ethereum address</p>
+                  <p className="text-sm text-red-500">
+                    Invalid Ethereum address
+                  </p>
                 )}
               </div>
 
@@ -329,7 +351,9 @@ export const SendReceiveTokens: React.FC = () => {
                         size="sm"
                         className="h-6 px-2 text-xs"
                         onClick={() => {
-                          const balance = tokenBalances.find(t => t.symbol === selectedToken)?.balance;
+                          const balance = tokenBalances.find(
+                            (t) => t.symbol === selectedToken,
+                          )?.balance;
                           if (balance) setSendAmount(balance);
                         }}
                       >
@@ -337,7 +361,9 @@ export const SendReceiveTokens: React.FC = () => {
                       </Button>
                     )}
                     {selectedToken && (
-                      <span className="text-sm text-gray-500">{selectedToken}</span>
+                      <span className="text-sm text-gray-500">
+                        {selectedToken}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -345,15 +371,22 @@ export const SendReceiveTokens: React.FC = () => {
                   <div className="flex justify-between text-sm text-gray-500">
                     <span>Available:</span>
                     <span>
-                      {tokenBalances.find(t => t.symbol === selectedToken)?.balance || "0"} {selectedToken}
+                      {tokenBalances.find((t) => t.symbol === selectedToken)
+                        ?.balance || "0"}{" "}
+                      {selectedToken}
                     </span>
                   </div>
                 )}
               </div>
 
-              <Button 
-                onClick={handleSend} 
-                disabled={isLoading || !selectedToken || !recipientAddress || !sendAmount}
+              <Button
+                onClick={handleSend}
+                disabled={
+                  isLoading ||
+                  !selectedToken ||
+                  !recipientAddress ||
+                  !sendAmount
+                }
                 className="w-full"
               >
                 {isLoading ? (
@@ -426,7 +459,10 @@ export const SendReceiveTokens: React.FC = () => {
             ) : (
               <div className="space-y-3">
                 {transactions.map((tx) => (
-                  <div key={tx.hash} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div
+                    key={tx.hash}
+                    className="flex items-center justify-between p-3 border rounded-lg"
+                  >
                     <div className="flex items-center gap-3">
                       {tx.type === "send" ? (
                         <ArrowUpRight className="h-5 w-5 text-red-500" />
@@ -436,12 +472,14 @@ export const SendReceiveTokens: React.FC = () => {
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-medium">
-                            {tx.type === "send" ? "Sent" : "Received"} {tx.amount} {tx.token}
+                            {tx.type === "send" ? "Sent" : "Received"}{" "}
+                            {tx.amount} {tx.token}
                           </span>
                           <TransactionStatus status={tx.status} />
                         </div>
                         <p className="text-sm text-gray-500 font-mono">
-                          {tx.type === "send" ? "To: " : "From: "}{formatAddress(tx.address, 6)}
+                          {tx.type === "send" ? "To: " : "From: "}
+                          {formatAddress(tx.address, 6)}
                         </p>
                       </div>
                     </div>

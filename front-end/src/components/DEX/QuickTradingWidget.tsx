@@ -1,9 +1,9 @@
 /**
  * Quick Trading Widget Component
- * 
+ *
  * Compact trading widget for embedding in stock symbol pages.
  * Provides quick buy/sell functionality with minimal UI footprint.
- * 
+ *
  * @author Augment Agent
  */
 
@@ -29,13 +29,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { 
-  TrendingUp, 
-  TrendingDown, 
+import {
+  TrendingUp,
+  TrendingDown,
   Zap,
   RefreshCw,
   AlertTriangle,
-  ExternalLink
+  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -47,15 +47,15 @@ interface QuickTradingWidgetProps {
   className?: string;
 }
 
-export default function QuickTradingWidget({ 
-  stockToken, 
-  stockSymbol, 
+export default function QuickTradingWidget({
+  stockToken,
+  stockSymbol,
   stockName,
-  className = "" 
+  className = "",
 }: QuickTradingWidgetProps) {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
-  
+
   // Trading state
   const [tradeDirection, setTradeDirection] = useState<"buy" | "sell">("buy");
   const [inputAmount, setInputAmount] = useState("");
@@ -103,7 +103,8 @@ export default function QuickTradingWidget({
   const { data: swapQuote } = useReadContract({
     address: dexAddress as `0x${string}`,
     abi: StockNGNDEXABI,
-    functionName: tradeDirection === "buy" ? "getQuoteNGNToStock" : "getQuoteStockToNGN",
+    functionName:
+      tradeDirection === "buy" ? "getQuoteNGNToStock" : "getQuoteStockToNGN",
     args: [stockToken, inputAmount ? parseEther(inputAmount) : 0n],
     query: {
       enabled: !!stockToken && !!inputAmount && !!dexAddress,
@@ -114,7 +115,7 @@ export default function QuickTradingWidget({
   // Calculate expected output and minimum amount
   const expectedOutput = swapQuote ? formatEther(swapQuote[0]) : "0";
   const priceImpact = swapQuote ? Number(formatEther(swapQuote[2])) : 0;
-  const minAmountOut = swapQuote 
+  const minAmountOut = swapQuote
     ? (swapQuote[0] * BigInt(9500)) / 10000n // 5% slippage tolerance
     : 0n;
 
@@ -131,21 +132,19 @@ export default function QuickTradingWidget({
     setIsLoading(true);
 
     try {
-      const deadline = Math.floor(Date.now() / 1000) + (20 * 60); // 20 minutes
+      const deadline = Math.floor(Date.now() / 1000) + 20 * 60; // 20 minutes
 
       writeContractFn({
         address: dexAddress as `0x${string}`,
         abi: StockNGNDEXABI,
-        functionName: tradeDirection === "buy" ? "swapNGNForStock" : "swapStockForNGN",
-        args: [
-          stockToken,
-          parseEther(inputAmount),
-          minAmountOut,
-          deadline,
-        ],
+        functionName:
+          tradeDirection === "buy" ? "swapNGNForStock" : "swapStockForNGN",
+        args: [stockToken, parseEther(inputAmount), minAmountOut, deadline],
       });
-      
-      toast.success(`${tradeDirection === "buy" ? "Buy" : "Sell"} order submitted!`);
+
+      toast.success(
+        `${tradeDirection === "buy" ? "Buy" : "Sell"} order submitted!`,
+      );
       setInputAmount(""); // Clear input after successful submission
     } catch (err: unknown) {
       const error = err as Error;
@@ -198,14 +197,16 @@ export default function QuickTradingWidget({
           {stockSymbol} - {stockName}
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Current Price */}
         {currentPrice ? (
           <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
             <span className="text-sm text-gray-600">Current Price</span>
             <div className="flex items-center">
-              <span className="font-medium">{formatPrice(currentPrice as bigint)}</span>
+              <span className="font-medium">
+                {formatPrice(currentPrice as bigint)}
+              </span>
               <Button variant="ghost" size="sm" onClick={() => refetchPrice()}>
                 <RefreshCw className="h-3 w-3" />
               </Button>
@@ -240,10 +241,10 @@ export default function QuickTradingWidget({
           <div className="flex justify-between text-sm">
             <span>Amount ({tradeDirection === "buy" ? "NGN" : "Tokens"})</span>
             <span className="text-gray-500">
-              Balance: {tradeDirection === "buy" 
+              Balance:{" "}
+              {tradeDirection === "buy"
                 ? `₦${formatBalance(ngnBalance as bigint)}`
-                : `${formatBalance(stockBalance as bigint)} tokens`
-              }
+                : `${formatBalance(stockBalance as bigint)} tokens`}
             </span>
           </div>
           <div className="flex space-x-2">
@@ -266,10 +267,9 @@ export default function QuickTradingWidget({
             <div className="flex justify-between text-sm">
               <span>Expected Output:</span>
               <span className="font-medium">
-                {tradeDirection === "buy" 
+                {tradeDirection === "buy"
                   ? `${Number(expectedOutput).toFixed(4)} tokens`
-                  : `₦${Number(expectedOutput).toFixed(2)}`
-                }
+                  : `₦${Number(expectedOutput).toFixed(2)}`}
               </span>
             </div>
             <div className="flex justify-between text-sm">
@@ -305,7 +305,9 @@ export default function QuickTradingWidget({
         {!isConnected && (
           <div className="flex items-center p-3 bg-amber-50 border border-amber-200 rounded-lg">
             <AlertTriangle className="h-4 w-4 text-amber-600 mr-2" />
-            <span className="text-amber-800 text-sm">Connect wallet to trade</span>
+            <span className="text-amber-800 text-sm">
+              Connect wallet to trade
+            </span>
           </div>
         )}
 

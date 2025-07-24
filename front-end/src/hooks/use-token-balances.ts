@@ -23,7 +23,9 @@ export const useTokenBalances = () => {
   const chainId = useChainId();
 
   // Get contract addresses for current network
-  const contractAddresses = chainId ? CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES] : null;
+  const contractAddresses = chainId
+    ? CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES]
+    : null;
 
   // NGN Stablecoin balance with error handling and retry logic
   const { data: ngnBalance, refetch: refetchNGN } = useReadContract({
@@ -34,28 +36,34 @@ export const useTokenBalances = () => {
     query: {
       enabled: !!address && !!contractAddresses?.ngnStablecoin,
       retry: 3,
-      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: number) =>
+        Math.min(1000 * 2 ** attemptIndex, 30000),
       staleTime: 30000, // 30 seconds
       gcTime: 5 * 60 * 1000, // 5 minutes
     },
   });
 
   // Popular stock tokens to check balances for
-  const popularTokens = useMemo(() => [
-    { symbol: "DANGCEM", name: "Dangote Cement" },
-    { symbol: "MTNN", name: "MTN Nigeria" },
-    { symbol: "ZENITHBANK", name: "Zenith Bank" },
-    { symbol: "GTCO", name: "Guaranty Trust Bank" },
-    { symbol: "ACCESS", name: "Access Bank" },
-    { symbol: "FBNH", name: "FBN Holdings" },
-    { symbol: "UBA", name: "United Bank for Africa" },
-    { symbol: "NESTLE", name: "Nestle Nigeria" },
-    { symbol: "BUACEMENT", name: "BUA Cement" },
-    { symbol: "AIRTELAFRI", name: "Airtel Africa" },
-  ], []);
+  const popularTokens = useMemo(
+    () => [
+      { symbol: "DANGCEM", name: "Dangote Cement" },
+      { symbol: "MTNN", name: "MTN Nigeria" },
+      { symbol: "ZENITHBANK", name: "Zenith Bank" },
+      { symbol: "GTCO", name: "Guaranty Trust Bank" },
+      { symbol: "ACCESS", name: "Access Bank" },
+      { symbol: "FBNH", name: "FBN Holdings" },
+      { symbol: "UBA", name: "United Bank for Africa" },
+      { symbol: "NESTLE", name: "Nestle Nigeria" },
+      { symbol: "BUACEMENT", name: "BUA Cement" },
+      { symbol: "AIRTELAFRI", name: "Airtel Africa" },
+    ],
+    [],
+  );
 
   // Type-safe access to token addresses
-  const tokens = contractAddresses?.tokens as Record<string, string> | undefined;
+  const tokens = contractAddresses?.tokens as
+    | Record<string, string>
+    | undefined;
 
   // Individual stock token balance hooks with error handling and retry logic
   const dangcemBalance = useReadContract({
@@ -66,7 +74,8 @@ export const useTokenBalances = () => {
     query: {
       enabled: !!address && !!tokens?.DANGCEM,
       retry: 3,
-      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: number) =>
+        Math.min(1000 * 2 ** attemptIndex, 30000),
       staleTime: 30000, // 30 seconds
       gcTime: 5 * 60 * 1000, // 5 minutes
     },
@@ -80,7 +89,8 @@ export const useTokenBalances = () => {
     query: {
       enabled: !!address && !!tokens?.MTNN,
       retry: 3,
-      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: number) =>
+        Math.min(1000 * 2 ** attemptIndex, 30000),
       staleTime: 30000,
       gcTime: 5 * 60 * 1000,
     },
@@ -94,7 +104,8 @@ export const useTokenBalances = () => {
     query: {
       enabled: !!address && !!tokens?.ZENITHBANK,
       retry: 3,
-      retryDelay: (attemptIndex: number) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: (attemptIndex: number) =>
+        Math.min(1000 * 2 ** attemptIndex, 30000),
       staleTime: 30000,
       gcTime: 5 * 60 * 1000,
     },
@@ -199,29 +210,32 @@ export const useTokenBalances = () => {
   });
 
   // Map of token balances for easy access
-  const tokenBalanceMap = useMemo(() => ({
-    DANGCEM: dangcemBalance,
-    MTNN: mtnnBalance,
-    ZENITHBANK: zenithbankBalance,
-    GTCO: gtcoBalance,
-    ACCESS: accessBalance,
-    FBNH: fbnhBalance,
-    UBA: ubaBalance,
-    NESTLE: nestleBalance,
-    BUACEMENT: buacementBalance,
-    AIRTELAFRI: airtelafriBalance,
-  }), [
-    dangcemBalance,
-    mtnnBalance,
-    zenithbankBalance,
-    gtcoBalance,
-    accessBalance,
-    fbnhBalance,
-    ubaBalance,
-    nestleBalance,
-    buacementBalance,
-    airtelafriBalance,
-  ]);
+  const tokenBalanceMap = useMemo(
+    () => ({
+      DANGCEM: dangcemBalance,
+      MTNN: mtnnBalance,
+      ZENITHBANK: zenithbankBalance,
+      GTCO: gtcoBalance,
+      ACCESS: accessBalance,
+      FBNH: fbnhBalance,
+      UBA: ubaBalance,
+      NESTLE: nestleBalance,
+      BUACEMENT: buacementBalance,
+      AIRTELAFRI: airtelafriBalance,
+    }),
+    [
+      dangcemBalance,
+      mtnnBalance,
+      zenithbankBalance,
+      gtcoBalance,
+      accessBalance,
+      fbnhBalance,
+      ubaBalance,
+      nestleBalance,
+      buacementBalance,
+      airtelafriBalance,
+    ],
+  );
 
   // Load all token balances - using useMemo to prevent infinite loops
   const loadedTokenBalances = useMemo(() => {
@@ -246,7 +260,8 @@ export const useTokenBalances = () => {
     // Add stock tokens using individual balance hooks
     for (const token of popularTokens) {
       const tokenAddress = tokens?.[token.symbol];
-      const balanceHook = tokenBalanceMap[token.symbol as keyof typeof tokenBalanceMap];
+      const balanceHook =
+        tokenBalanceMap[token.symbol as keyof typeof tokenBalanceMap];
 
       if (tokenAddress && balanceHook?.data) {
         balances.push({
@@ -271,7 +286,14 @@ export const useTokenBalances = () => {
     }
 
     return balances;
-  }, [address, contractAddresses, ngnBalance, popularTokens, tokens, tokenBalanceMap]);
+  }, [
+    address,
+    contractAddresses,
+    ngnBalance,
+    popularTokens,
+    tokens,
+    tokenBalanceMap,
+  ]);
 
   // Calculate loading state based on individual hook states
   const isLoading = useMemo(() => {
@@ -315,7 +337,9 @@ export const useTokenBalances = () => {
       airtelafriBalance.error,
     ].filter(Boolean);
 
-    return errors.length > 0 ? `Failed to load some token balances: ${errors.length} errors` : null;
+    return errors.length > 0
+      ? `Failed to load some token balances: ${errors.length} errors`
+      : null;
   }, [
     dangcemBalance.error,
     mtnnBalance.error,
@@ -360,9 +384,14 @@ export const useTokenBalances = () => {
   ]);
 
   // Get balance for specific token
-  const getTokenBalance = useCallback((symbol: string) => {
-    return loadedTokenBalances.find((token: TokenBalance) => token.symbol === symbol);
-  }, [loadedTokenBalances]);
+  const getTokenBalance = useCallback(
+    (symbol: string) => {
+      return loadedTokenBalances.find(
+        (token: TokenBalance) => token.symbol === symbol,
+      );
+    },
+    [loadedTokenBalances],
+  );
 
   // Get total portfolio value (in NGN)
   const getTotalValue = useCallback(() => {

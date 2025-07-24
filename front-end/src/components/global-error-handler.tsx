@@ -129,7 +129,9 @@ export function GlobalErrorHandler() {
 
       logError(
         "ResourceLoadError",
-        new Error(`Failed to load resource: ${target.tagName} - ${resourceSrc}`),
+        new Error(
+          `Failed to load resource: ${target.tagName} - ${resourceSrc}`,
+        ),
         {
           type: "resource_error",
           tagName: target.tagName,
@@ -155,10 +157,7 @@ export function GlobalErrorHandler() {
         }
       } else if (target.tagName === "IMG") {
         // Don't show toast for image errors as they're usually not critical
-        console.warn(
-          "Image failed to load:",
-          (target as HTMLImageElement).src,
-        );
+        console.warn("Image failed to load:", (target as HTMLImageElement).src);
       }
     };
 

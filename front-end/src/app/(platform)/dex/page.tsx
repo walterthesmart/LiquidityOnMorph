@@ -22,10 +22,16 @@ import {
   BarChart3,
   Wallet,
   RefreshCw,
-  Info
+  Info,
 } from "lucide-react";
 import { useAccount, useChainId } from "wagmi";
-import { DEXDashboard, EnhancedTradingInterface, OrderBook, TradeHistory, MockTradingDemo } from "@/components/DEX";
+import {
+  DEXDashboard,
+  EnhancedTradingInterface,
+  OrderBook,
+  TradeHistory,
+  MockTradingDemo,
+} from "@/components/DEX";
 import { WalletStatus } from "@/components/WalletStatus";
 
 // Loading components
@@ -62,22 +68,26 @@ export default function DEXPage() {
               NGN-DEX Trading
             </h1>
             <p className="text-gray-600">
-              Trade Nigerian stocks with NGN stablecoin on decentralized exchange
+              Trade Nigerian stocks with NGN stablecoin on decentralized
+              exchange
             </p>
           </div>
 
           <div className="flex items-center gap-4">
             {/* Network Status */}
-            <Badge variant={chainId ? "default" : "destructive"} className="px-3 py-1">
+            <Badge
+              variant={chainId ? "default" : "destructive"}
+              className="px-3 py-1"
+            >
               {chainId === 11155111
                 ? "Sepolia"
                 : chainId === 355113
-                ? "Bitfinity Testnet"
-                : chainId === 2810
-                ? "Morph Holesky Testnet"
-                : chainId === 2818
-                ? "Morph Mainnet"
-                : "Unknown Network"}
+                  ? "Bitfinity Testnet"
+                  : chainId === 2810
+                    ? "Morph Holesky Testnet"
+                    : chainId === 2818
+                      ? "Morph Mainnet"
+                      : "Unknown Network"}
             </Badge>
 
             {/* Wallet Status */}
@@ -93,9 +103,12 @@ export default function DEXPage() {
             <div className="flex items-center">
               <Info className="h-5 w-5 text-amber-600 mr-3" />
               <div>
-                <h3 className="font-medium text-amber-800">Wallet Connection Required</h3>
+                <h3 className="font-medium text-amber-800">
+                  Wallet Connection Required
+                </h3>
                 <p className="text-amber-700 text-sm mt-1">
-                  Please connect your wallet to access trading features and view your portfolio.
+                  Please connect your wallet to access trading features and view
+                  your portfolio.
                 </p>
               </div>
             </div>
@@ -104,7 +117,11 @@ export default function DEXPage() {
       )}
 
       {/* Main Trading Interface */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
           <TabsTrigger value="trade" className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
@@ -130,7 +147,9 @@ export default function DEXPage() {
 
         {/* Demo Tab */}
         <TabsContent value="demo" className="space-y-6">
-          <Suspense fallback={<LoadingCard title="Loading Mock Trading Demo..." />}>
+          <Suspense
+            fallback={<LoadingCard title="Loading Mock Trading Demo..." />}
+          >
             <MockTradingDemo />
           </Suspense>
         </TabsContent>
@@ -140,21 +159,27 @@ export default function DEXPage() {
           <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
             {/* Enhanced Trading Interface */}
             <div className="xl:col-span-5">
-              <Suspense fallback={<LoadingCard title="Loading Trading Interface..." />}>
+              <Suspense
+                fallback={<LoadingCard title="Loading Trading Interface..." />}
+              >
                 <EnhancedTradingInterface className="h-full" />
               </Suspense>
             </div>
 
             {/* Order Book */}
             <div className="xl:col-span-4">
-              <Suspense fallback={<LoadingCard title="Loading Order Book..." />}>
+              <Suspense
+                fallback={<LoadingCard title="Loading Order Book..." />}
+              >
                 <OrderBook stockToken="" className="h-full" />
               </Suspense>
             </div>
 
             {/* Trade History & Quick Stats */}
             <div className="xl:col-span-3 space-y-6">
-              <Suspense fallback={<LoadingCard title="Loading Trade History..." />}>
+              <Suspense
+                fallback={<LoadingCard title="Loading Trade History..." />}
+              >
                 <TradeHistory className="h-full" />
               </Suspense>
 
@@ -209,7 +234,9 @@ export default function DEXPage() {
                 {isConnected ? (
                   <div className="text-center py-8">
                     <Wallet className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600">Portfolio data will be displayed here</p>
+                    <p className="text-gray-600">
+                      Portfolio data will be displayed here
+                    </p>
                     <p className="text-sm text-gray-500 mt-2">
                       Connected: {address?.slice(0, 6)}...{address?.slice(-4)}
                     </p>
@@ -217,7 +244,9 @@ export default function DEXPage() {
                 ) : (
                   <div className="text-center py-8">
                     <Wallet className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-600">Connect wallet to view portfolio</p>
+                    <p className="text-gray-600">
+                      Connect wallet to view portfolio
+                    </p>
                   </div>
                 )}
               </CardContent>

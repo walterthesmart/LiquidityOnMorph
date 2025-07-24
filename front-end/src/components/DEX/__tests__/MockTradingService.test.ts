@@ -1,6 +1,6 @@
 /**
  * Mock Trading Service Tests
- * 
+ *
  * Tests for the mock trading service functionality
  */
 
@@ -18,11 +18,11 @@ describe("MockTradingService", () => {
   describe("getMockTradingPairs", () => {
     it("should return trading pairs for valid chain ID", async () => {
       const pairs = await mockTradingService.getMockTradingPairs(testChainId);
-      
+
       expect(pairs).toBeDefined();
       expect(Array.isArray(pairs)).toBe(true);
       expect(pairs.length).toBeGreaterThan(0);
-      
+
       // Check structure of first pair
       if (pairs.length > 0) {
         const pair = pairs[0];
@@ -44,10 +44,12 @@ describe("MockTradingService", () => {
 
     it("should return pairs sorted by symbol", async () => {
       const pairs = await mockTradingService.getMockTradingPairs(testChainId);
-      
+
       if (pairs.length > 1) {
         for (let i = 1; i < pairs.length; i++) {
-          expect(pairs[i].symbol.localeCompare(pairs[i - 1].symbol)).toBeGreaterThanOrEqual(0);
+          expect(
+            pairs[i].symbol.localeCompare(pairs[i - 1].symbol),
+          ).toBeGreaterThanOrEqual(0);
         }
       }
     });
@@ -57,9 +59,9 @@ describe("MockTradingService", () => {
     it("should return mock balance for user", async () => {
       const balance = await mockTradingService.getMockBalance(
         testUserAddress,
-        "0x1234567890123456789012345678901234567890"
+        "0x1234567890123456789012345678901234567890",
       );
-      
+
       expect(balance).toBeDefined();
       expect(typeof balance).toBe("string");
       expect(parseFloat(balance)).toBeGreaterThanOrEqual(0);
@@ -67,17 +69,17 @@ describe("MockTradingService", () => {
 
     it("should return consistent balance for same inputs", async () => {
       const tokenAddress = "0x1234567890123456789012345678901234567890";
-      
+
       const balance1 = await mockTradingService.getMockBalance(
         testUserAddress,
-        tokenAddress
+        tokenAddress,
       );
 
       const balance2 = await mockTradingService.getMockBalance(
         testUserAddress,
-        tokenAddress
+        tokenAddress,
       );
-      
+
       expect(balance1).toBe(balance2);
     });
   });
@@ -87,9 +89,9 @@ describe("MockTradingService", () => {
       const quote = await mockTradingService.getMockSwapQuote(
         "NGN",
         "STOCK",
-        "1000"
+        "1000",
       );
-      
+
       expect(quote).toBeDefined();
       expect(quote).toHaveProperty("inputAmount", "1000");
       expect(quote).toHaveProperty("outputAmount");
@@ -97,7 +99,7 @@ describe("MockTradingService", () => {
       expect(quote).toHaveProperty("fee");
       expect(quote).toHaveProperty("minimumReceived");
       expect(quote).toHaveProperty("exchangeRate");
-      
+
       // Validate numeric values
       expect(parseFloat(quote.outputAmount)).toBeGreaterThan(0);
       expect(parseFloat(quote.fee)).toBeGreaterThan(0);
@@ -111,12 +113,12 @@ describe("MockTradingService", () => {
       const quote = await mockTradingService.getMockSwapQuote(
         "NGN",
         "STOCK",
-        inputAmount
+        inputAmount,
       );
-      
+
       const expectedFee = parseFloat(inputAmount) * 0.003; // 0.3% fee
       const actualFee = parseFloat(quote.fee);
-      
+
       expect(actualFee).toBeCloseTo(expectedFee, 6);
     });
   });
@@ -128,14 +130,14 @@ describe("MockTradingService", () => {
         "NGN",
         "STOCK",
         "1000",
-        testChainId
+        testChainId,
       );
-      
+
       expect(result).toBeDefined();
       expect(result).toHaveProperty("success");
       expect(result).toHaveProperty("txHash");
       expect(result).toHaveProperty("message");
-      
+
       if (result.success) {
         expect(result.txHash).toMatch(/^0x[a-f0-9]{64}$/);
         expect(result.message).toContain("successful");
@@ -146,41 +148,45 @@ describe("MockTradingService", () => {
       const inputToken = "NGN";
       const outputToken = "STOCK";
       const inputAmount = "1000";
-      
+
       // Get initial balances
       const initialInputBalance = await mockTradingService.getMockBalance(
         testUserAddress,
-        inputToken
+        inputToken,
       );
 
       const initialOutputBalance = await mockTradingService.getMockBalance(
         testUserAddress,
-        outputToken
+        outputToken,
       );
-      
+
       // Execute swap
       const result = await mockTradingService.executeMockSwap(
         testUserAddress,
         inputToken,
         outputToken,
         inputAmount,
-        testChainId
+        testChainId,
       );
-      
+
       if (result.success) {
         // Check that balances were updated
         const finalInputBalance = await mockTradingService.getMockBalance(
           testUserAddress,
-          inputToken
+          inputToken,
         );
 
         const finalOutputBalance = await mockTradingService.getMockBalance(
           testUserAddress,
-          outputToken
+          outputToken,
         );
-        
-        expect(parseFloat(finalInputBalance)).toBeLessThan(parseFloat(initialInputBalance));
-        expect(parseFloat(finalOutputBalance)).toBeGreaterThan(parseFloat(initialOutputBalance));
+
+        expect(parseFloat(finalInputBalance)).toBeLessThan(
+          parseFloat(initialInputBalance),
+        );
+        expect(parseFloat(finalOutputBalance)).toBeGreaterThan(
+          parseFloat(initialOutputBalance),
+        );
       }
     });
   });
@@ -189,10 +195,10 @@ describe("MockTradingService", () => {
     it("should reset user balances", () => {
       // Add some mock balances
       mockTradingService.getMockBalances(testUserAddress);
-      
+
       // Reset balances
       mockTradingService.resetMockBalances(testUserAddress);
-      
+
       // Check that balances are empty
       const balances = mockTradingService.getMockBalances(testUserAddress);
       expect(balances).toEqual([]);
@@ -212,9 +218,9 @@ describe("MockTradingService", () => {
         "NGN",
         "STOCK",
         "1000",
-        testChainId
+        testChainId,
       );
-      
+
       const balances = mockTradingService.getMockBalances(testUserAddress);
       expect(Array.isArray(balances)).toBe(true);
     });

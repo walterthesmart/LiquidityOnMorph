@@ -17,7 +17,12 @@ import {
   base,
   sepolia,
 } from "viem/chains";
-import { bitfinityTestnet, bitfinityMainnet, morphHolesky, morphMainnet } from "@/config";
+import {
+  bitfinityTestnet,
+  bitfinityMainnet,
+  morphHolesky,
+  morphMainnet,
+} from "@/config";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -147,8 +152,9 @@ export function RainbowKitAppProvider({
   // Detect theme changes
   useEffect(() => {
     const checkTheme = () => {
-      const isDark = document.documentElement.classList.contains('dark') ||
-        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark =
+        document.documentElement.classList.contains("dark") ||
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
       setIsDarkMode(isDark);
     };
 
@@ -159,16 +165,16 @@ export function RainbowKitAppProvider({
     const observer = new MutationObserver(checkTheme);
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['class'],
+      attributeFilter: ["class"],
     });
 
     // Listen for system theme changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', checkTheme);
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    mediaQuery.addEventListener("change", checkTheme);
 
     return () => {
       observer.disconnect();
-      mediaQuery.removeEventListener('change', checkTheme);
+      mediaQuery.removeEventListener("change", checkTheme);
     };
   }, []);
 

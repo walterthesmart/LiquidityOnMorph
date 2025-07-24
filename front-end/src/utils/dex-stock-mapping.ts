@@ -1,6 +1,6 @@
 /**
  * DEX Stock Mapping Utility
- * 
+ *
  * This utility provides functions to map contract addresses from the DEX
  * to user-friendly stock information including names, symbols, and logos.
  */
@@ -34,7 +34,7 @@ function createAddressToSymbolMap(chainId: number): Record<string, string> {
   if (contractAddresses?.tokens) {
     // Create reverse mapping: address -> symbol
     Object.entries(contractAddresses.tokens).forEach(([symbol, address]) => {
-      if (typeof address === 'string') {
+      if (typeof address === "string") {
         addressToSymbolMap[address.toLowerCase()] = symbol;
       }
     });
@@ -51,7 +51,7 @@ function createAddressToSymbolMap(chainId: number): Record<string, string> {
  */
 export function getStockInfoByAddress(
   contractAddress: string,
-  chainId: number
+  chainId: number,
 ): DEXStockInfo | null {
   try {
     // Create address to symbol mapping for current chain
@@ -86,7 +86,10 @@ export function getStockInfoByAddress(
       logoAlt,
     };
   } catch (error) {
-    console.error(`Error getting stock info for address ${contractAddress}:`, error);
+    console.error(
+      `Error getting stock info for address ${contractAddress}:`,
+      error,
+    );
     return null;
   }
 }
@@ -99,10 +102,10 @@ export function getStockInfoByAddress(
  */
 export function getStockInfoByAddresses(
   contractAddresses: string[],
-  chainId: number
+  chainId: number,
 ): DEXStockInfo[] {
   return contractAddresses
-    .map(address => getStockInfoByAddress(address, chainId))
+    .map((address) => getStockInfoByAddress(address, chainId))
     .filter((info): info is DEXStockInfo => info !== null);
 }
 
@@ -112,7 +115,10 @@ export function getStockInfoByAddresses(
  * @param chainId - The current chain ID
  * @returns True if the address is a valid stock token
  */
-export function isValidStockToken(contractAddress: string, chainId: number): boolean {
+export function isValidStockToken(
+  contractAddress: string,
+  chainId: number,
+): boolean {
   const addressToSymbolMap = createAddressToSymbolMap(chainId);
   return contractAddress.toLowerCase() in addressToSymbolMap;
 }
@@ -124,15 +130,15 @@ export function isValidStockToken(contractAddress: string, chainId: number): boo
  */
 export function getAllAvailableStocks(chainId: number): DEXStockInfo[] {
   const contractAddresses = getContractAddresses(chainId);
-  
+
   if (!contractAddresses?.tokens) {
     return [];
   }
-  
+
   const addresses = Object.values(contractAddresses.tokens).filter(
-    (address): address is string => typeof address === 'string'
+    (address): address is string => typeof address === "string",
   );
-  
+
   return getStockInfoByAddresses(addresses, chainId);
 }
 
@@ -150,7 +156,9 @@ export function formatStockDisplayName(stockInfo: DEXStockInfo): string {
  * @param stockInfo - The stock information
  * @returns Formatted display name with sector
  */
-export function formatStockDisplayNameWithSector(stockInfo: DEXStockInfo): string {
+export function formatStockDisplayNameWithSector(
+  stockInfo: DEXStockInfo,
+): string {
   return `${stockInfo.companyName} (${stockInfo.symbol}) - ${stockInfo.sector}`;
 }
 
@@ -163,11 +171,12 @@ export function formatStockDisplayNameWithSector(stockInfo: DEXStockInfo): strin
 export function searchStocks(query: string, chainId: number): DEXStockInfo[] {
   const allStocks = getAllAvailableStocks(chainId);
   const lowerQuery = query.toLowerCase();
-  
-  return allStocks.filter(stock => 
-    stock.symbol.toLowerCase().includes(lowerQuery) ||
-    stock.companyName.toLowerCase().includes(lowerQuery) ||
-    stock.name.toLowerCase().includes(lowerQuery) ||
-    stock.sector.toLowerCase().includes(lowerQuery)
+
+  return allStocks.filter(
+    (stock) =>
+      stock.symbol.toLowerCase().includes(lowerQuery) ||
+      stock.companyName.toLowerCase().includes(lowerQuery) ||
+      stock.name.toLowerCase().includes(lowerQuery) ||
+      stock.sector.toLowerCase().includes(lowerQuery),
   );
 }

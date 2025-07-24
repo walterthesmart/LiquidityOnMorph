@@ -31,7 +31,6 @@ import { ArrowUp, ArrowDown, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useWriteContract, useChainId } from "wagmi";
 
-
 import transferAVAX from "@/server-actions/sell/transfer_avax";
 import { sendNotification } from "@/server-actions/sell/notify";
 import updateUserStockHoldings from "@/server-actions/stocks/update_stock_holdings";
@@ -107,7 +106,8 @@ export const AssetHoldings = ({
 
       // Calculate minimum NGN amount out (with 2% slippage tolerance)
       const stockAmountIn = BigInt(amount) * BigInt(10 ** 18); // Convert to wei
-      const expectedNGNOut = stockAmountIn * BigInt(Math.floor(pricePerShare * 100)) / BigInt(100);
+      const expectedNGNOut =
+        (stockAmountIn * BigInt(Math.floor(pricePerShare * 100))) / BigInt(100);
       const minNGNAmountOut = (expectedNGNOut * BigInt(98)) / BigInt(100); // 2% slippage
 
       // Set deadline to 30 minutes from now
@@ -156,10 +156,15 @@ export const AssetHoldings = ({
         const saleAmountAVAX = saleAmount / NGN_TO_AVAX;
         // Get token address from symbol
         const { getTokenAddress } = await import("@/abis");
-        const tokenAddress = getTokenAddress(chainId || 11155111, selectedStock.symbol);
+        const tokenAddress = getTokenAddress(
+          chainId || 11155111,
+          selectedStock.symbol,
+        );
 
         if (!tokenAddress) {
-          throw new Error(`Token address not found for ${selectedStock.symbol}`);
+          throw new Error(
+            `Token address not found for ${selectedStock.symbol}`,
+          );
         }
 
         // First approve the DEX to spend tokens
@@ -167,7 +172,7 @@ export const AssetHoldings = ({
         await approveToken(tokenAddress, sellQuantity);
 
         // Wait a moment for approval to be mined
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
 
         // Then execute the sell
         toast.info("Executing sell order...");

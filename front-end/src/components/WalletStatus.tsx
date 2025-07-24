@@ -52,7 +52,9 @@ export const WalletStatus: React.FC = () => {
           <div className="flex justify-between">
             <span className="text-gray-600">Address:</span>
             <span className="font-mono text-sm">
-              {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "N/A"}
+              {address
+                ? `${address.slice(0, 6)}...${address.slice(-4)}`
+                : "N/A"}
             </span>
           </div>
 

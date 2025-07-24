@@ -14,13 +14,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Clock, 
-  TrendingUp, 
+import {
+  Clock,
+  TrendingUp,
   TrendingDown,
   RefreshCw,
   Activity,
-  ExternalLink
+  ExternalLink,
 } from "lucide-react";
 import { useAccount, useChainId } from "wagmi";
 
@@ -57,16 +57,16 @@ interface UserTransaction {
 const generateMockTrades = (): Trade[] => {
   const trades: Trade[] = [];
   const now = Date.now();
-  
+
   for (let i = 0; i < 20; i++) {
     const type = Math.random() > 0.5 ? "buy" : "sell";
     const price = 50 + Math.random() * 10; // Price between 50-60 NGN
     const amount = Math.random() * 100 + 10; // Amount between 10-110
     const value = price * amount;
-    
+
     trades.push({
       id: `trade_${i}`,
-      timestamp: now - (i * 60000 * Math.random() * 60), // Random times in last hour
+      timestamp: now - i * 60000 * Math.random() * 60, // Random times in last hour
       type,
       price,
       amount,
@@ -75,21 +75,21 @@ const generateMockTrades = (): Trade[] => {
       user: `0x${Math.random().toString(16).substr(2, 40)}`,
     });
   }
-  
+
   return trades.sort((a, b) => b.timestamp - a.timestamp);
 };
 
 const generateMockUserTransactions = (): UserTransaction[] => {
   const transactions: UserTransaction[] = [];
   const now = Date.now();
-  
+
   for (let i = 0; i < 10; i++) {
     const types = ["swap", "liquidity_add", "liquidity_remove"] as const;
     const statuses = ["confirmed", "pending", "failed"] as const;
-    
+
     transactions.push({
       id: `tx_${i}`,
-      timestamp: now - (i * 3600000), // Every hour
+      timestamp: now - i * 3600000, // Every hour
       type: types[Math.floor(Math.random() * types.length)],
       status: statuses[Math.floor(Math.random() * statuses.length)],
       fromToken: "NGN",
@@ -100,15 +100,20 @@ const generateMockUserTransactions = (): UserTransaction[] => {
       gasUsed: Math.floor(Math.random() * 100000 + 21000),
     });
   }
-  
+
   return transactions.sort((a, b) => b.timestamp - a.timestamp);
 };
 
-export default function TradeHistory({ stockToken, className = "" }: TradeHistoryProps) {
+export default function TradeHistory({
+  stockToken,
+  className = "",
+}: TradeHistoryProps) {
   const { isConnected } = useAccount();
   const chainId = useChainId();
   const [recentTrades, setRecentTrades] = useState<Trade[]>([]);
-  const [userTransactions, setUserTransactions] = useState<UserTransaction[]>([]);
+  const [userTransactions, setUserTransactions] = useState<UserTransaction[]>(
+    [],
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   // Load mock data
@@ -148,17 +153,23 @@ export default function TradeHistory({ stockToken, className = "" }: TradeHistor
 
   const getStatusColor = (status: UserTransaction["status"]) => {
     switch (status) {
-      case "confirmed": return "bg-green-100 text-green-800";
-      case "pending": return "bg-yellow-100 text-yellow-800";
-      case "failed": return "bg-red-100 text-red-800";
-      default: return "bg-gray-100 text-gray-800";
+      case "confirmed":
+        return "bg-green-100 text-green-800";
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "failed":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getTypeIcon = (type: "buy" | "sell") => {
-    return type === "buy" 
-      ? <TrendingUp className="h-4 w-4 text-green-500" />
-      : <TrendingDown className="h-4 w-4 text-red-500" />;
+    return type === "buy" ? (
+      <TrendingUp className="h-4 w-4 text-green-500" />
+    ) : (
+      <TrendingDown className="h-4 w-4 text-red-500" />
+    );
   };
 
   return (
@@ -169,8 +180,15 @@ export default function TradeHistory({ stockToken, className = "" }: TradeHistor
             <Clock className="h-5 w-5 mr-2" />
             Trade History
           </div>
-          <Button variant="outline" size="sm" onClick={refreshData} disabled={isLoading}>
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={refreshData}
+            disabled={isLoading}
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+            />
           </Button>
         </CardTitle>
       </CardHeader>
@@ -198,15 +216,19 @@ export default function TradeHistory({ stockToken, className = "" }: TradeHistor
               {/* Trade List */}
               <div className="max-h-64 overflow-y-auto space-y-1">
                 {recentTrades.map((trade) => (
-                  <div 
-                    key={trade.id} 
+                  <div
+                    key={trade.id}
                     className="grid grid-cols-5 text-xs py-2 px-2 hover:bg-gray-50 rounded cursor-pointer"
                   >
                     <div className="flex items-center">
                       {getTypeIcon(trade.type)}
-                      <span className={`ml-1 capitalize ${
-                        trade.type === "buy" ? "text-green-600" : "text-red-600"
-                      }`}>
+                      <span
+                        className={`ml-1 capitalize ${
+                          trade.type === "buy"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
                         {trade.type}
                       </span>
                     </div>
@@ -232,19 +254,22 @@ export default function TradeHistory({ stockToken, className = "" }: TradeHistor
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <div className="text-lg font-bold text-green-600">
-                    {recentTrades.filter(t => t.type === "buy").length}
+                    {recentTrades.filter((t) => t.type === "buy").length}
                   </div>
                   <div className="text-xs text-gray-600">Buy Orders</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold text-red-600">
-                    {recentTrades.filter(t => t.type === "sell").length}
+                    {recentTrades.filter((t) => t.type === "sell").length}
                   </div>
                   <div className="text-xs text-gray-600">Sell Orders</div>
                 </div>
                 <div>
                   <div className="text-lg font-bold">
-                    ₦{recentTrades.reduce((sum, t) => sum + t.value, 0).toFixed(0)}
+                    ₦
+                    {recentTrades
+                      .reduce((sum, t) => sum + t.value, 0)
+                      .toFixed(0)}
                   </div>
                   <div className="text-xs text-gray-600">Total Volume</div>
                 </div>
@@ -257,12 +282,17 @@ export default function TradeHistory({ stockToken, className = "" }: TradeHistor
             {!isConnected ? (
               <div className="text-center py-8">
                 <Activity className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Connect wallet to view your transactions</p>
+                <p className="text-gray-600">
+                  Connect wallet to view your transactions
+                </p>
               </div>
             ) : (
               <div className="space-y-3">
                 {userTransactions.map((tx) => (
-                  <div key={tx.id} className="border rounded-lg p-3 hover:bg-gray-50">
+                  <div
+                    key={tx.id}
+                    className="border rounded-lg p-3 hover:bg-gray-50"
+                  >
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
                         <Badge variant="outline" className="capitalize">
@@ -297,9 +327,9 @@ export default function TradeHistory({ stockToken, className = "" }: TradeHistor
                         Gas: {tx.gasUsed?.toLocaleString() || "N/A"}
                       </div>
                       <Button variant="ghost" size="sm" asChild>
-                        <a 
-                          href={getExplorerUrl(tx.txHash)} 
-                          target="_blank" 
+                        <a
+                          href={getExplorerUrl(tx.txHash)}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center"
                         >

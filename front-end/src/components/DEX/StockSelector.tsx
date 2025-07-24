@@ -1,6 +1,6 @@
 /**
  * Stock Selector Component
- * 
+ *
  * Enhanced stock selection dropdown with logos, company names, and sectors.
  * Supports both real blockchain data and mock data for testing.
  */
@@ -20,7 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { mockTradingService, MockTradingPair } from "@/services/mock-trading-service";
+import {
+  mockTradingService,
+  MockTradingPair,
+} from "@/services/mock-trading-service";
 import { cn } from "@/lib/utils";
 
 interface StockSelectorProps {
@@ -59,12 +62,14 @@ const StockSelector: React.FC<StockSelectorProps> = ({
         setError(null);
 
         if (useMockData) {
-          const mockStocks = await mockTradingService.getMockTradingPairs(chainId);
+          const mockStocks =
+            await mockTradingService.getMockTradingPairs(chainId);
           setStocks(mockStocks);
         } else {
           // TODO: Implement real blockchain data fetching
           // For now, fall back to mock data
-          const mockStocks = await mockTradingService.getMockTradingPairs(chainId);
+          const mockStocks =
+            await mockTradingService.getMockTradingPairs(chainId);
           setStocks(mockStocks);
         }
       } catch (err) {
@@ -83,22 +88,21 @@ const StockSelector: React.FC<StockSelectorProps> = ({
   const selectedStock = stocks.find((stock) => stock.stockToken === value);
 
   // Group stocks by sector
-  const stocksBySector = stocks.reduce((acc, stock) => {
-    if (!acc[stock.sector]) {
-      acc[stock.sector] = [];
-    }
-    acc[stock.sector].push(stock);
-    return acc;
-  }, {} as Record<string, MockTradingPair[]>);
+  const stocksBySector = stocks.reduce(
+    (acc, stock) => {
+      if (!acc[stock.sector]) {
+        acc[stock.sector] = [];
+      }
+      acc[stock.sector].push(stock);
+      return acc;
+    },
+    {} as Record<string, MockTradingPair[]>,
+  );
 
   if (loading) {
     return (
       <div className={cn("w-full", className)}>
-        <Button
-          variant="outline"
-          className="w-full justify-between"
-          disabled
-        >
+        <Button variant="outline" className="w-full justify-between" disabled>
           <span className="flex items-center">
             <div className="w-6 h-6 bg-gray-200 rounded-full animate-pulse mr-2" />
             Loading stocks...
@@ -161,7 +165,9 @@ const StockSelector: React.FC<StockSelectorProps> = ({
         <SelectContent>
           {stocks.length === 0 ? (
             <div className="flex items-center justify-center p-4">
-              <span className="text-sm text-muted-foreground">No stocks available</span>
+              <span className="text-sm text-muted-foreground">
+                No stocks available
+              </span>
             </div>
           ) : (
             Object.entries(stocksBySector).map(([sector, sectorStocks]) => (

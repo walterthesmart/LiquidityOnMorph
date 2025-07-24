@@ -1,6 +1,6 @@
 /**
  * Mock Trading Demo Component
- * 
+ *
  * Demonstrates trading pair functionality with simulated data and interactions.
  * Perfect for testing and showcasing the DEX functionality without real blockchain transactions.
  */
@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
+import {
   ArrowUpDown,
   TrendingUp,
   TrendingDown,
@@ -24,39 +24,47 @@ import {
   RefreshCw,
   CheckCircle,
   Wallet,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 import { toast } from "sonner";
 import StockSelector from "./StockSelector";
-import { mockTradingService, MockSwapQuote } from "@/services/mock-trading-service";
+import {
+  mockTradingService,
+  MockSwapQuote,
+} from "@/services/mock-trading-service";
 
 interface MockTradingDemoProps {
   className?: string;
 }
 
-const MockTradingDemo: React.FC<MockTradingDemoProps> = ({ className = "" }) => {
+const MockTradingDemo: React.FC<MockTradingDemoProps> = ({
+  className = "",
+}) => {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
-  
+
   // Trading state
   const [selectedStock, setSelectedStock] = useState<string>("");
   const [tradeDirection, setTradeDirection] = useState<"buy" | "sell">("buy");
   const [inputAmount, setInputAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [swapQuote, setSwapQuote] = useState<MockSwapQuote | null>(null);
-  
+
   // Mock balances
   const [ngnBalance, setNgnBalance] = useState("10000.00");
   const [stockBalance, setStockBalance] = useState("0.00");
-  
+
   // Demo state
-  const [transactionHistory, setTransactionHistory] = useState<Array<{
-    id: string;
-    type: string;
-    amount: string;
-    timestamp: number;
-    status: string;
-  }>>([]);
+  const [transactionHistory, setTransactionHistory] = useState<
+    Array<{
+      id: string;
+      type: "buy" | "sell";
+      inputAmount: string;
+      outputAmount: string;
+      timestamp: string;
+      status: string;
+    }>
+  >([]);
 
   // Get swap quote when inputs change
   useEffect(() => {
@@ -69,13 +77,13 @@ const MockTradingDemo: React.FC<MockTradingDemoProps> = ({ className = "" }) => 
       try {
         const inputToken = tradeDirection === "buy" ? "NGN" : selectedStock;
         const outputToken = tradeDirection === "buy" ? selectedStock : "NGN";
-        
+
         const quote = await mockTradingService.getMockSwapQuote(
           inputToken,
           outputToken,
-          inputAmount
+          inputAmount,
         );
-        
+
         setSwapQuote(quote);
       } catch (error) {
         console.error("Error getting quote:", error);
@@ -95,38 +103,53 @@ const MockTradingDemo: React.FC<MockTradingDemoProps> = ({ className = "" }) => 
     }
 
     setIsLoading(true);
-    
+
     try {
       const inputToken = tradeDirection === "buy" ? "NGN" : selectedStock;
       const outputToken = tradeDirection === "buy" ? selectedStock : "NGN";
-      
+
       const result = await mockTradingService.executeMockSwap(
         address,
         inputToken,
         outputToken,
         inputAmount,
-        chainId
+        chainId,
       );
 
       if (result.success) {
         // Update mock balances
         if (tradeDirection === "buy") {
-          setNgnBalance(prev => (parseFloat(prev) - parseFloat(inputAmount)).toFixed(2));
-          setStockBalance(prev => (parseFloat(prev) + parseFloat(swapQuote?.outputAmount || "0")).toFixed(2));
+          setNgnBalance((prev) =>
+            (parseFloat(prev) - parseFloat(inputAmount)).toFixed(2),
+          );
+          setStockBalance((prev) =>
+            (
+              parseFloat(prev) + parseFloat(swapQuote?.outputAmount || "0")
+            ).toFixed(2),
+          );
         } else {
-          setStockBalance(prev => (parseFloat(prev) - parseFloat(inputAmount)).toFixed(2));
-          setNgnBalance(prev => (parseFloat(prev) + parseFloat(swapQuote?.outputAmount || "0")).toFixed(2));
+          setStockBalance((prev) =>
+            (parseFloat(prev) - parseFloat(inputAmount)).toFixed(2),
+          );
+          setNgnBalance((prev) =>
+            (
+              parseFloat(prev) + parseFloat(swapQuote?.outputAmount || "0")
+            ).toFixed(2),
+          );
         }
 
         // Add to transaction history
-        setTransactionHistory(prev => [{
-          id: result.txHash,
-          type: tradeDirection,
-          inputAmount,
-          outputAmount: swapQuote?.outputAmount || "0",
-          timestamp: new Date().toISOString(),
-          status: "success"
-        }, ...prev.slice(0, 9)]); // Keep last 10 transactions
+        setTransactionHistory((prev) => [
+          {
+            id: result.txHash,
+            type: tradeDirection,
+            inputAmount,
+            outputAmount: swapQuote?.outputAmount || "0",
+            timestamp: new Date().toISOString(),
+            status: "success",
+          },
+          ...prev.slice(0, 9),
+        ]); // Keep last 10 transactions
 
         toast.success(result.message);
         setInputAmount("");
@@ -188,8 +211,8 @@ const MockTradingDemo: React.FC<MockTradingDemoProps> = ({ className = "" }) => 
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">
-            This demo uses simulated data to showcase trading pair functionality. 
-            No real blockchain transactions are executed.
+            This demo uses simulated data to showcase trading pair
+            functionality. No real blockchain transactions are executed.
           </p>
         </CardContent>
       </Card>
@@ -217,7 +240,12 @@ const MockTradingDemo: React.FC<MockTradingDemoProps> = ({ className = "" }) => 
               </div>
 
               {/* Trade Direction */}
-              <Tabs value={tradeDirection} onValueChange={(value: "buy" | "sell") => setTradeDirection(value)}>
+              <Tabs
+                value={tradeDirection}
+                onValueChange={(value: string) =>
+                  setTradeDirection(value as "buy" | "sell")
+                }
+              >
                 <TabsList className="grid w-full grid-cols-2">
                   <TabsTrigger value="buy" className="flex items-center">
                     <TrendingUp className="h-4 w-4 mr-1" />
@@ -267,15 +295,16 @@ const MockTradingDemo: React.FC<MockTradingDemoProps> = ({ className = "" }) => 
                     <div className="flex justify-between text-sm">
                       <span>You will receive:</span>
                       <span className="font-medium">
-                        {tradeDirection === "buy" 
+                        {tradeDirection === "buy"
                           ? `${swapQuote.outputAmount} tokens`
-                          : `₦${swapQuote.outputAmount}`
-                        }
+                          : `₦${swapQuote.outputAmount}`}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Price Impact:</span>
-                      <span className="text-yellow-600">{swapQuote.priceImpact}%</span>
+                      <span className="text-yellow-600">
+                        {swapQuote.priceImpact}%
+                      </span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Fee:</span>
@@ -286,7 +315,7 @@ const MockTradingDemo: React.FC<MockTradingDemoProps> = ({ className = "" }) => 
               )}
 
               {/* Swap Button */}
-              <Button 
+              <Button
                 onClick={handleSwap}
                 disabled={!selectedStock || !inputAmount || isLoading}
                 className="w-full"
@@ -343,7 +372,10 @@ const MockTradingDemo: React.FC<MockTradingDemoProps> = ({ className = "" }) => 
               ) : (
                 <div className="space-y-2">
                   {transactionHistory.slice(0, 5).map((tx) => (
-                    <div key={tx.id} className="flex items-center justify-between p-2 bg-muted/50 rounded">
+                    <div
+                      key={tx.id}
+                      className="flex items-center justify-between p-2 bg-muted/50 rounded"
+                    >
                       <div className="flex items-center">
                         {tx.type === "buy" ? (
                           <TrendingUp className="h-3 w-3 text-green-500 mr-2" />

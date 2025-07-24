@@ -210,12 +210,15 @@
   --rk-radii-modalMobile: var(--radius);
 
   /* Fonts */
-  --rk-fonts-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --rk-fonts-body:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 
   /* Shadows */
   --rk-shadows-connectButton: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --rk-shadows-dialog: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  --rk-shadows-profileDetailsAction: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --rk-shadows-profileDetailsAction:
+    0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --rk-shadows-selectedOption: 0 0 0 1px var(--primary);
   --rk-shadows-selectedWallet: 0 0 0 1px var(--primary);
   --rk-shadows-walletLogo: 0 0 0 1px rgba(0, 0, 0, 0.06);
@@ -276,7 +279,9 @@ html:not(.dark) [data-rk] [data-rk-address] {
 [data-rk] button[data-testid="rk-connect-button"]:hover {
   background: oklch(from var(--primary) calc(l * 0.9) c h) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
 }
 
 [data-rk] button[data-testid="rk-connect-button"]:active {
@@ -536,7 +541,9 @@ html:not(.dark) [data-rk] [data-rk-address] {
 /* Address Display */
 [data-rk] [data-rk-address] {
   color: #000000 !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace !important;
+  font-family:
+    ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo,
+    monospace !important;
   font-weight: 500 !important;
 }
 

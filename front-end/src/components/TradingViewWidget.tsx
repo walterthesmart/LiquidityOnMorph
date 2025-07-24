@@ -6,7 +6,10 @@ import { logError } from "@/lib/utils";
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, BarChart3 } from "lucide-react";
-import { TradingViewFallback, useTradingViewEnabled } from "./TradingViewFallback";
+import {
+  TradingViewFallback,
+  useTradingViewEnabled,
+} from "./TradingViewFallback";
 
 // TradingView widget configuration interface (corrected for Advanced Chart widget)
 interface TradingViewWidgetConfig {
@@ -296,9 +299,10 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = memo(
           // Enhanced error handling
           script.onerror = (error) => {
             // Only log meaningful errors to reduce noise
-            const errorMessage = error instanceof Error
-              ? error.message
-              : `Failed to load TradingView script from ${script.src}`;
+            const errorMessage =
+              error instanceof Error
+                ? error.message
+                : `Failed to load TradingView script from ${script.src}`;
 
             console.warn("TradingView script failed to load:", {
               url: script.src,
@@ -412,7 +416,7 @@ const TradingViewWidget: React.FC<TradingViewWidgetProps> = memo(
             onRetry={() => {
               setHasError(false);
               setErrorMessage("");
-              setRetryCount(prev => prev + 1);
+              setRetryCount((prev) => prev + 1);
               setIsLoading(true);
             }}
             className={className}

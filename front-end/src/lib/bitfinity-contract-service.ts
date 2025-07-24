@@ -91,8 +91,6 @@ const SUPPORTED_NETWORKS = {
   },
 };
 
-
-
 export interface StockMetadata {
   symbol: string;
   companyName: string;
@@ -444,8 +442,6 @@ export class MultiChainContractService {
       return null;
     }
   }
-
-
 }
 
 // Backward compatibility
@@ -453,4 +449,6 @@ export const BitfinityContractService = MultiChainContractService;
 
 // Export singleton instances
 export const multiChainService = new MultiChainContractService("morph_holesky");
-export const bitfinityService = new MultiChainContractService("bitfinity_testnet");
+export const bitfinityService = new MultiChainContractService(
+  "bitfinity_testnet",
+);

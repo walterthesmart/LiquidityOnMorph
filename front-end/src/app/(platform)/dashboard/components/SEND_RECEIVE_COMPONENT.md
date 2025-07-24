@@ -7,6 +7,7 @@ The `SendReceiveTokens` component is a comprehensive UI for transferring NGN sta
 ## Features
 
 ### 🚀 **Send Functionality**
+
 - **Token Selection**: Choose between NGN stablecoin and various Nigerian stock tokens (DANGCEM, MTNN, etc.)
 - **Address Validation**: Real-time validation of Ethereum addresses with visual feedback
 - **Amount Input**: Numeric input with MAX button for quick balance selection
@@ -14,17 +15,20 @@ The `SendReceiveTokens` component is a comprehensive UI for transferring NGN sta
 - **Transaction Execution**: Secure contract interaction with loading states
 
 ### 📥 **Receive Functionality**
+
 - **Wallet Address Display**: Shows user's wallet address with copy-to-clipboard
 - **QR Code Generation**: Real-time QR code generation for easy address sharing
 - **Visual Feedback**: Copy confirmation with success indicators
 
 ### 📊 **Transaction History**
+
 - **Recent Transactions**: Display of sent/received transactions
 - **Status Tracking**: Visual status indicators (pending, confirmed, failed)
 - **Explorer Links**: Direct links to blockchain explorers for transaction details
 - **Formatted Addresses**: Truncated addresses for better readability
 
 ### 🔄 **Balance Management**
+
 - **Real-time Balances**: Automatic fetching of token balances
 - **Refresh Functionality**: Manual refresh button for balance updates
 - **Multi-token Support**: Support for NGN and multiple stock tokens
@@ -32,6 +36,7 @@ The `SendReceiveTokens` component is a comprehensive UI for transferring NGN sta
 ## Technical Implementation
 
 ### **Components Used**
+
 - `Card` - Main container with header and content
 - `Tabs` - Navigation between Send, Receive, and History
 - `Select` - Token selection dropdown
@@ -41,12 +46,14 @@ The `SendReceiveTokens` component is a comprehensive UI for transferring NGN sta
 - `QRCode` - Custom QR code component using qrcode library
 
 ### **Hooks & State Management**
+
 - `useTokenBalances` - Custom hook for fetching and managing token balances
 - `useAccount` - Wagmi hook for wallet connection
 - `useWriteContract` - Wagmi hook for contract interactions
 - `useState` - Local state for form inputs and UI state
 
 ### **Contract Integration**
+
 - **NGN Stablecoin**: ERC20 transfer functionality
 - **Stock Tokens**: ERC20 transfer for Nigerian stock tokens
 - **Multi-network Support**: Works on Sepolia and Bitfinity networks
@@ -55,20 +62,24 @@ The `SendReceiveTokens` component is a comprehensive UI for transferring NGN sta
 ## Usage
 
 ### **Installation**
+
 The component is already integrated into the dashboard. Dependencies include:
+
 ```bash
 npm install qrcode @types/qrcode
 ```
 
 ### **Integration**
+
 ```tsx
 import { SendReceiveTokens } from "./components/send-receive-tokens";
 
 // In your dashboard component
-<SendReceiveTokens />
+<SendReceiveTokens />;
 ```
 
 ### **Required Context**
+
 - Wallet connection (via Wagmi/RainbowKit)
 - Contract addresses configuration
 - Network switching capability
@@ -76,18 +87,21 @@ import { SendReceiveTokens } from "./components/send-receive-tokens";
 ## Security Features
 
 ### **Input Validation**
+
 - Ethereum address format validation
 - Amount validation (positive numbers only)
 - Balance checking before transactions
 - Real-time error feedback
 
 ### **Transaction Safety**
+
 - Transaction confirmation before execution
 - Clear transaction details display
 - Error handling with user-friendly messages
 - Network-specific explorer links
 
 ### **Access Control**
+
 - Wallet connection requirement
 - Contract-level access controls
 - Secure contract interactions
@@ -95,18 +109,21 @@ import { SendReceiveTokens } from "./components/send-receive-tokens";
 ## Styling & UX
 
 ### **Design System**
+
 - Consistent with existing platform aesthetic
 - Mobile-responsive layout
 - Clean, modern interface
 - Intuitive navigation
 
 ### **Visual Feedback**
+
 - Loading states for all async operations
 - Success/error toast notifications
 - Status indicators for transactions
 - Copy confirmation animations
 
 ### **Accessibility**
+
 - Keyboard navigation support
 - Screen reader friendly
 - High contrast status indicators
@@ -115,11 +132,13 @@ import { SendReceiveTokens } from "./components/send-receive-tokens";
 ## Network Support
 
 ### **Supported Networks**
+
 - **Sepolia Testnet** (Chain ID: 11155111)
 - **Bitfinity Testnet** (Chain ID: 355113)
 - **Bitfinity Mainnet** (Chain ID: 355110)
 
 ### **Explorer Integration**
+
 - Automatic explorer URL generation
 - Network-specific transaction links
 - Address and token links
@@ -127,12 +146,14 @@ import { SendReceiveTokens } from "./components/send-receive-tokens";
 ## Error Handling
 
 ### **Common Errors**
+
 - Invalid recipient address
 - Insufficient balance
 - Network connection issues
 - Transaction failures
 
 ### **User Feedback**
+
 - Toast notifications for all operations
 - Inline validation messages
 - Clear error descriptions
@@ -141,6 +162,7 @@ import { SendReceiveTokens } from "./components/send-receive-tokens";
 ## Future Enhancements
 
 ### **Planned Features**
+
 - Transaction fee estimation
 - Batch transfers
 - Address book functionality
@@ -148,6 +170,7 @@ import { SendReceiveTokens } from "./components/send-receive-tokens";
 - Advanced filtering for history
 
 ### **Performance Optimizations**
+
 - Balance caching
 - Transaction history pagination
 - Optimistic UI updates

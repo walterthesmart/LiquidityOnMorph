@@ -1,6 +1,6 @@
 /**
  * Mock Trading Service
- * 
+ *
  * Provides mock/dummy trading functionality for testing purposes.
  * This service simulates swap operations without requiring actual blockchain transactions.
  */
@@ -89,7 +89,7 @@ class MockTradingService {
     }
 
     const pairs: MockTradingPair[] = [];
-    
+
     Object.entries(contractAddresses.tokens).forEach(([symbol, address]) => {
       const stockInfo = getStockInfoByAddress(address, chainId);
       if (stockInfo) {
@@ -118,11 +118,13 @@ class MockTradingService {
    */
   async getMockBalance(
     userAddress: string,
-    tokenAddress: string
+    tokenAddress: string,
   ): Promise<string> {
     const balances = this.mockBalances.get(userAddress) || [];
-    const balance = balances.find(b => b.address.toLowerCase() === tokenAddress.toLowerCase());
-    
+    const balance = balances.find(
+      (b) => b.address.toLowerCase() === tokenAddress.toLowerCase(),
+    );
+
     if (balance) {
       return balance.balance;
     }
@@ -138,7 +140,7 @@ class MockTradingService {
   async getMockSwapQuote(
     inputToken: string,
     outputToken: string,
-    inputAmount: string
+    inputAmount: string,
   ): Promise<MockSwapQuote> {
     // Simulate price calculation with some randomness
     const baseRate = Math.random() * 0.1 + 0.95; // 0.95 to 1.05
@@ -146,7 +148,9 @@ class MockTradingService {
     const fee = (parseFloat(inputAmount) * 0.003).toFixed(6); // 0.3% fee
     const priceImpact = (Math.random() * 2).toFixed(2); // 0-2% price impact
     const slippage = 0.05; // 5% slippage tolerance
-    const minimumReceived = (parseFloat(outputAmount) * (1 - slippage)).toFixed(6);
+    const minimumReceived = (parseFloat(outputAmount) * (1 - slippage)).toFixed(
+      6,
+    );
 
     return {
       inputAmount,
@@ -166,19 +170,31 @@ class MockTradingService {
     inputToken: string,
     outputToken: string,
     inputAmount: string,
-    chainId: number
+    chainId: number,
   ): Promise<{ success: boolean; txHash: string; message: string }> {
+    // Suppress unused variable warning - chainId may be used for chain-specific logic in future
+    void chainId;
+
     // Simulate transaction delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Simulate success/failure (95% success rate)
     const success = Math.random() > 0.05;
-    
+
     if (success) {
       // Update mock balances
       this.updateMockBalance(userAddress, inputToken, inputAmount, "subtract");
-      const quote = await this.getMockSwapQuote(inputToken, outputToken, inputAmount);
-      this.updateMockBalance(userAddress, outputToken, quote.outputAmount, "add");
+      const quote = await this.getMockSwapQuote(
+        inputToken,
+        outputToken,
+        inputAmount,
+      );
+      this.updateMockBalance(
+        userAddress,
+        outputToken,
+        quote.outputAmount,
+        "add",
+      );
 
       return {
         success: true,
@@ -189,7 +205,8 @@ class MockTradingService {
       return {
         success: false,
         txHash: "",
-        message: "Mock swap failed - insufficient liquidity (simulated failure)",
+        message:
+          "Mock swap failed - insufficient liquidity (simulated failure)",
       };
     }
   }
@@ -217,18 +234,20 @@ class MockTradingService {
     userAddress: string,
     tokenAddress: string,
     amount: string,
-    operation: "add" | "subtract"
+    operation: "add" | "subtract",
   ): void {
     const balances = this.mockBalances.get(userAddress) || [];
     const existingIndex = balances.findIndex(
-      b => b.address.toLowerCase() === tokenAddress.toLowerCase()
+      (b) => b.address.toLowerCase() === tokenAddress.toLowerCase(),
     );
 
-    const currentAmount = existingIndex >= 0 ? parseFloat(balances[existingIndex].balance) : 0;
+    const currentAmount =
+      existingIndex >= 0 ? parseFloat(balances[existingIndex].balance) : 0;
     const changeAmount = parseFloat(amount);
-    const newAmount = operation === "add" 
-      ? currentAmount + changeAmount 
-      : Math.max(0, currentAmount - changeAmount);
+    const newAmount =
+      operation === "add"
+        ? currentAmount + changeAmount
+        : Math.max(0, currentAmount - changeAmount);
 
     if (existingIndex >= 0) {
       balances[existingIndex].balance = newAmount.toFixed(6);

@@ -58,10 +58,13 @@ export function logError(
       (errorObj.target && typeof errorObj.target === "object");
 
     if (!hasUsefulInfo) {
-      console.debug(`[${context}] Skipping error object with no useful info at ${timestamp}:`, {
-        error: errorObj,
-        additionalData,
-      });
+      console.debug(
+        `[${context}] Skipping error object with no useful info at ${timestamp}:`,
+        {
+          error: errorObj,
+          additionalData,
+        },
+      );
       return null;
     }
 

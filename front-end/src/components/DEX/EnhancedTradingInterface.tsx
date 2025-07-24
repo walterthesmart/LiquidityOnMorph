@@ -1,9 +1,9 @@
 /**
  * Enhanced Trading Interface Component
- * 
+ *
  * Comprehensive trading interface with market/limit orders, slippage settings,
  * gas estimation, order book display, and real-time updates.
- * 
+ *
  * @author Augment Agent
  */
 
@@ -32,7 +32,6 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 
-
 import { Switch } from "@/components/ui/switch";
 import {
   ArrowUpDown,
@@ -43,11 +42,14 @@ import {
   AlertTriangle,
   CheckCircle,
   RefreshCw,
-  Calculator
+  Calculator,
 } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
-import { getStockInfoByAddresses, DEXStockInfo } from "@/utils/dex-stock-mapping";
+import {
+  getStockInfoByAddresses,
+  DEXStockInfo,
+} from "@/utils/dex-stock-mapping";
 import StockSelector from "./StockSelector";
 
 interface EnhancedTradingInterfaceProps {
@@ -58,15 +60,17 @@ interface EnhancedTradingInterfaceProps {
 type OrderType = "market" | "limit";
 type TradeDirection = "buy" | "sell";
 
-export default function EnhancedTradingInterface({ 
-  className = "", 
-  selectedSymbol 
+export default function EnhancedTradingInterface({
+  className = "",
+  selectedSymbol,
 }: EnhancedTradingInterfaceProps) {
   const { address, isConnected } = useAccount();
   const chainId = useChainId();
-  
+
   // Trading state
-  const [selectedStock, setSelectedStock] = useState<string>(selectedSymbol || "");
+  const [selectedStock, setSelectedStock] = useState<string>(
+    selectedSymbol || "",
+  );
   const [orderType, setOrderType] = useState<OrderType>("market");
   const [tradeDirection, setTradeDirection] = useState<TradeDirection>("buy");
   const [inputAmount, setInputAmount] = useState("");
@@ -74,7 +78,7 @@ export default function EnhancedTradingInterface({
   const [slippageTolerance, setSlippageTolerance] = useState(5); // 5% default
   const [deadline, setDeadline] = useState(20); // 20 minutes default
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
-  
+
   // UI state
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -82,7 +86,8 @@ export default function EnhancedTradingInterface({
 
   // Enhanced stock information state
   const [, setEnhancedStockInfo] = useState<DEXStockInfo[]>([]);
-  const [selectedStockInfo, setSelectedStockInfo] = useState<DEXStockInfo | null>(null);
+  const [selectedStockInfo, setSelectedStockInfo] =
+    useState<DEXStockInfo | null>(null);
   const [stockInfoLoading, setStockInfoLoading] = useState(false);
   const [stockInfoError, setStockInfoError] = useState<string | null>(null);
 
@@ -90,15 +95,17 @@ export default function EnhancedTradingInterface({
   const ngnAddress = chainId ? getNGNStablecoinAddress(chainId) : "";
 
   // Get all available stock tokens
-  const { data: allStockTokens, refetch: refetchStockTokens } = useReadContract({
-    address: dexAddress as `0x${string}`,
-    abi: StockNGNDEXABI,
-    functionName: "getAllStockTokens",
-    query: {
-      enabled: !!dexAddress,
-      refetchInterval: 30000, // Refresh every 30 seconds
+  const { data: allStockTokens, refetch: refetchStockTokens } = useReadContract(
+    {
+      address: dexAddress as `0x${string}`,
+      abi: StockNGNDEXABI,
+      functionName: "getAllStockTokens",
+      query: {
+        enabled: !!dexAddress,
+        refetchInterval: 30000, // Refresh every 30 seconds
+      },
     },
-  }) as { data: string[] | undefined; refetch: () => void };
+  ) as { data: string[] | undefined; refetch: () => void };
 
   // Process stock tokens to get enhanced information
   React.useEffect(() => {
@@ -112,7 +119,9 @@ export default function EnhancedTradingInterface({
 
         // Update selected stock info if we have a selected stock
         if (selectedStock) {
-          const selectedInfo = enhancedInfo.find(info => info.contractAddress === selectedStock);
+          const selectedInfo = enhancedInfo.find(
+            (info) => info.contractAddress === selectedStock,
+          );
           setSelectedStockInfo(selectedInfo || null);
         }
 
@@ -196,25 +205,31 @@ export default function EnhancedTradingInterface({
     },
   });
 
-  const { data: stockAllowance, refetch: refetchStockAllowance } = useReadContract({
-    address: selectedStock as `0x${string}`,
-    abi: NigerianStockTokenABI,
-    functionName: "allowance",
-    args: [address, dexAddress],
-    query: {
-      enabled: !!address && !!selectedStock && !!dexAddress,
-      refetchInterval: 10000,
-    },
-  });
+  const { data: stockAllowance, refetch: refetchStockAllowance } =
+    useReadContract({
+      address: selectedStock as `0x${string}`,
+      abi: NigerianStockTokenABI,
+      functionName: "allowance",
+      args: [address, dexAddress],
+      query: {
+        enabled: !!address && !!selectedStock && !!dexAddress,
+        refetchInterval: 10000,
+      },
+    });
 
   // Get swap quote for market orders
   const { data: swapQuote } = useReadContract({
     address: dexAddress as `0x${string}`,
     abi: StockNGNDEXABI,
-    functionName: tradeDirection === "buy" ? "getQuoteNGNToStock" : "getQuoteStockToNGN",
+    functionName:
+      tradeDirection === "buy" ? "getQuoteNGNToStock" : "getQuoteStockToNGN",
     args: [selectedStock, inputAmount ? parseEther(inputAmount) : 0n],
     query: {
-      enabled: !!selectedStock && !!inputAmount && !!dexAddress && orderType === "market",
+      enabled:
+        !!selectedStock &&
+        !!inputAmount &&
+        !!dexAddress &&
+        orderType === "market",
       refetchInterval: 3000, // Refresh every 3 seconds for real-time quotes
     },
   }) as { data: [bigint, bigint, bigint] | undefined };
@@ -223,7 +238,8 @@ export default function EnhancedTradingInterface({
   const expectedOutput = swapQuote ? formatEther(swapQuote[0]) : "0";
   const priceImpact = swapQuote ? Number(formatEther(swapQuote[2])) : 0;
   const minAmountOut = swapQuote
-    ? (swapQuote[0] * BigInt(Math.floor((100 - slippageTolerance) * 100))) / 10000n
+    ? (swapQuote[0] * BigInt(Math.floor((100 - slippageTolerance) * 100))) /
+      10000n
     : 0n;
 
   // Check if approval is needed
@@ -238,7 +254,14 @@ export default function EnhancedTradingInterface({
       // For selling (Stock to NGN), check stock allowance
       return !stockAllowance || (stockAllowance as bigint) < inputAmountBigInt;
     }
-  }, [tradeDirection, inputAmount, ngnAllowance, stockAllowance, inputAmountBigInt, address]);
+  }, [
+    tradeDirection,
+    inputAmount,
+    ngnAllowance,
+    stockAllowance,
+    inputAmountBigInt,
+    address,
+  ]);
 
   // Gas estimation
   const { data: gasEstimate } = useEstimateGas({
@@ -271,7 +294,7 @@ export default function EnhancedTradingInterface({
   });
 
   // Calculate deadline timestamp
-  const deadlineTimestamp = Math.floor(Date.now() / 1000) + (deadline * 60);
+  const deadlineTimestamp = Math.floor(Date.now() / 1000) + deadline * 60;
 
   // Helper function to parse and format error messages
   const parseErrorMessage = (error: Error): string => {
@@ -280,7 +303,10 @@ export default function EnhancedTradingInterface({
     if (message.includes("user rejected") || message.includes("user denied")) {
       return "Transaction was cancelled by user";
     }
-    if (message.includes("insufficient funds") || message.includes("insufficient balance")) {
+    if (
+      message.includes("insufficient funds") ||
+      message.includes("insufficient balance")
+    ) {
       return "Insufficient balance for this transaction";
     }
     if (message.includes("slippage") || message.includes("slippageexceeded")) {
@@ -289,19 +315,31 @@ export default function EnhancedTradingInterface({
     if (message.includes("deadline") || message.includes("deadlineexceeded")) {
       return "Transaction deadline exceeded. Try increasing the deadline or submitting faster";
     }
-    if (message.includes("allowance") || message.includes("transfer amount exceeds allowance")) {
+    if (
+      message.includes("allowance") ||
+      message.includes("transfer amount exceeds allowance")
+    ) {
       return "Insufficient token allowance. Please approve token spending first";
     }
     if (message.includes("paused") || message.includes("pausable")) {
       return "Trading is currently paused. Please try again later";
     }
-    if (message.includes("price impact") || message.includes("excessivepriceimpact")) {
+    if (
+      message.includes("price impact") ||
+      message.includes("excessivepriceimpact")
+    ) {
       return "Price impact too high. Try reducing trade size or check liquidity";
     }
-    if (message.includes("trading pair not found") || message.includes("tradingpairnotfound")) {
+    if (
+      message.includes("trading pair not found") ||
+      message.includes("tradingpairnotfound")
+    ) {
       return "Trading pair not available for this token";
     }
-    if (message.includes("emergency mode") || message.includes("emergencymodeactive")) {
+    if (
+      message.includes("emergency mode") ||
+      message.includes("emergencymodeactive")
+    ) {
       return "DEX is in emergency mode. Trading is temporarily disabled";
     }
     if (message.includes("nonce too low")) {
@@ -310,7 +348,10 @@ export default function EnhancedTradingInterface({
     if (message.includes("replacement transaction underpriced")) {
       return "Transaction replacement failed. Please wait for the current transaction to complete";
     }
-    if (message.includes("transaction dropped") || message.includes("transaction replaced")) {
+    if (
+      message.includes("transaction dropped") ||
+      message.includes("transaction replaced")
+    ) {
       return "Transaction was dropped or replaced. This usually happens when network is congested. Please try again";
     }
 
@@ -326,12 +367,22 @@ export default function EnhancedTradingInterface({
     }
 
     // Check if user has sufficient balance
-    if (tradeDirection === "buy" && ngnBalance && inputAmountBigInt > (ngnBalance as bigint)) {
+    if (
+      tradeDirection === "buy" &&
+      ngnBalance &&
+      inputAmountBigInt > (ngnBalance as bigint)
+    ) {
       toast.error("Insufficient NGN balance for this transaction");
       return;
     }
-    if (tradeDirection === "sell" && stockBalance && inputAmountBigInt > (stockBalance as bigint)) {
-      toast.error(`Insufficient ${selectedStockInfo?.symbol || "stock"} balance for this transaction`);
+    if (
+      tradeDirection === "sell" &&
+      stockBalance &&
+      inputAmountBigInt > (stockBalance as bigint)
+    ) {
+      toast.error(
+        `Insufficient ${selectedStockInfo?.symbol || "stock"} balance for this transaction`,
+      );
       return;
     }
 
@@ -395,18 +446,30 @@ export default function EnhancedTradingInterface({
     }
 
     // Check if user has sufficient balance
-    if (tradeDirection === "buy" && ngnBalance && inputAmountBigInt > (ngnBalance as bigint)) {
+    if (
+      tradeDirection === "buy" &&
+      ngnBalance &&
+      inputAmountBigInt > (ngnBalance as bigint)
+    ) {
       toast.error("Insufficient NGN balance for this transaction");
       return;
     }
-    if (tradeDirection === "sell" && stockBalance && inputAmountBigInt > (stockBalance as bigint)) {
-      toast.error(`Insufficient ${selectedStockInfo?.symbol || "stock"} balance for this transaction`);
+    if (
+      tradeDirection === "sell" &&
+      stockBalance &&
+      inputAmountBigInt > (stockBalance as bigint)
+    ) {
+      toast.error(
+        `Insufficient ${selectedStockInfo?.symbol || "stock"} balance for this transaction`,
+      );
       return;
     }
 
     // Check if quote is available and reasonable
     if (!swapQuote || swapQuote[0] === 0n) {
-      toast.error("Unable to get price quote. Please try again or check liquidity");
+      toast.error(
+        "Unable to get price quote. Please try again or check liquidity",
+      );
       return;
     }
 
@@ -420,7 +483,8 @@ export default function EnhancedTradingInterface({
         writeContractFn({
           address: dexAddress as `0x${string}`,
           abi: StockNGNDEXABI,
-          functionName: tradeDirection === "buy" ? "swapNGNForStock" : "swapStockForNGN",
+          functionName:
+            tradeDirection === "buy" ? "swapNGNForStock" : "swapStockForNGN",
           args: [
             selectedStock,
             inputAmountBigInt,
@@ -504,8 +568,8 @@ export default function EnhancedTradingInterface({
               stockInfoLoading
                 ? "Loading stocks..."
                 : stockInfoError
-                ? "Error loading stocks"
-                : "Choose a stock to trade"
+                  ? "Error loading stocks"
+                  : "Choose a stock to trade"
             }
             disabled={stockInfoLoading || !!stockInfoError}
             useMockData={true}
@@ -542,7 +606,12 @@ export default function EnhancedTradingInterface({
                   </span>
                 </div>
                 <div className="flex items-center">
-                  <span className="font-medium">₦{currentPrice ? Number(formatEther(currentPrice as bigint)).toFixed(4) : "0.0000"}</span>
+                  <span className="font-medium">
+                    ₦
+                    {currentPrice
+                      ? Number(formatEther(currentPrice as bigint)).toFixed(4)
+                      : "0.0000"}
+                  </span>
                   <TrendingUp className="h-4 w-4 ml-1 text-green-500" />
                 </div>
               </div>
@@ -551,7 +620,10 @@ export default function EnhancedTradingInterface({
         ) : null}
 
         {/* Order Type Selection */}
-        <Tabs value={orderType} onValueChange={(value) => setOrderType(value as OrderType)}>
+        <Tabs
+          value={orderType}
+          onValueChange={(value) => setOrderType(value as OrderType)}
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="market">Market Order</TabsTrigger>
             <TabsTrigger value="limit">Limit Order</TabsTrigger>
@@ -598,10 +670,10 @@ export default function EnhancedTradingInterface({
               </div>
               {/* Balance Display */}
               <div className="text-sm text-gray-600">
-                Balance: {tradeDirection === "buy" 
+                Balance:{" "}
+                {tradeDirection === "buy"
                   ? `₦${ngnBalance ? Number(formatEther(ngnBalance as bigint)).toFixed(2) : "0.00"}`
-                  : `${stockBalance ? Number(formatEther(stockBalance as bigint)).toFixed(4) : "0.0000"} tokens`
-                }
+                  : `${stockBalance ? Number(formatEther(stockBalance as bigint)).toFixed(4) : "0.0000"} tokens`}
               </div>
             </div>
 
@@ -613,25 +685,25 @@ export default function EnhancedTradingInterface({
                     <div className="flex justify-between">
                       <span className="text-sm">Expected Output:</span>
                       <span className="font-medium">
-                        {tradeDirection === "buy" 
+                        {tradeDirection === "buy"
                           ? `${Number(expectedOutput).toFixed(4)} tokens`
-                          : `₦${Number(expectedOutput).toFixed(2)}`
-                        }
+                          : `₦${Number(expectedOutput).toFixed(2)}`}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Price Impact:</span>
-                      <span className={`font-medium ${priceImpact > 5 ? "text-red-600" : "text-green-600"}`}>
+                      <span
+                        className={`font-medium ${priceImpact > 5 ? "text-red-600" : "text-green-600"}`}
+                      >
                         {priceImpact.toFixed(2)}%
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm">Minimum Received:</span>
                       <span className="font-medium text-sm">
-                        {tradeDirection === "buy" 
+                        {tradeDirection === "buy"
                           ? `${Number(formatEther(minAmountOut)).toFixed(4)} tokens`
-                          : `₦${Number(formatEther(minAmountOut)).toFixed(2)}`
-                        }
+                          : `₦${Number(formatEther(minAmountOut)).toFixed(2)}`}
                       </span>
                     </div>
                   </div>
@@ -677,9 +749,7 @@ export default function EnhancedTradingInterface({
                   onChange={(e) => setSlippageTolerance(Number(e.target.value))}
                   className="w-full"
                 />
-                <div className="text-xs text-gray-500">
-                  Range: 0.1% - 20%
-                </div>
+                <div className="text-xs text-gray-500">Range: 0.1% - 20%</div>
               </div>
 
               {/* Transaction Deadline */}
@@ -748,10 +818,17 @@ export default function EnhancedTradingInterface({
                     <div className="flex items-center">
                       <AlertTriangle className="h-5 w-5 text-blue-600 mr-2" />
                       <span className="text-blue-800">
-                        Approval needed for {tradeDirection === "buy" ? "NGN" : selectedStockInfo?.symbol || "stock"} tokens
+                        Approval needed for{" "}
+                        {tradeDirection === "buy"
+                          ? "NGN"
+                          : selectedStockInfo?.symbol || "stock"}{" "}
+                        tokens
                       </span>
                     </div>
-                    <Badge variant="outline" className="text-blue-600 border-blue-300">
+                    <Badge
+                      variant="outline"
+                      className="text-blue-600 border-blue-300"
+                    >
                       Step 1 of 2
                     </Badge>
                   </div>
@@ -775,7 +852,11 @@ export default function EnhancedTradingInterface({
                 ) : (
                   <>
                     <CheckCircle className="h-5 w-5 mr-2" />
-                    Approve {tradeDirection === "buy" ? "NGN" : selectedStockInfo?.symbol || "Stock"} Spending
+                    Approve{" "}
+                    {tradeDirection === "buy"
+                      ? "NGN"
+                      : selectedStockInfo?.symbol || "Stock"}{" "}
+                    Spending
                   </>
                 )}
               </Button>
@@ -795,7 +876,8 @@ export default function EnhancedTradingInterface({
                 ) : (
                   <>
                     <Zap className="h-5 w-5 mr-2" />
-                    {tradeDirection === "buy" ? "Buy" : "Sell"} {orderType === "market" ? "Market" : "Limit"}
+                    {tradeDirection === "buy" ? "Buy" : "Sell"}{" "}
+                    {orderType === "market" ? "Market" : "Limit"}
                   </>
                 )}
               </Button>
@@ -804,7 +886,10 @@ export default function EnhancedTradingInterface({
             {/* Step indicator when approval is not needed */}
             {!needsApproval && (
               <div className="flex items-center justify-center">
-                <Badge variant="outline" className="text-green-600 border-green-300">
+                <Badge
+                  variant="outline"
+                  className="text-green-600 border-green-300"
+                >
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Ready to trade
                 </Badge>
@@ -817,7 +902,9 @@ export default function EnhancedTradingInterface({
         {(!isConnected || !selectedStock || !inputAmount) && (
           <Button
             onClick={handleTrade}
-            disabled={!isConnected || !selectedStock || !inputAmount || isLoading}
+            disabled={
+              !isConnected || !selectedStock || !inputAmount || isLoading
+            }
             className="w-full h-12 text-lg font-semibold"
             size="lg"
           >
@@ -829,7 +916,8 @@ export default function EnhancedTradingInterface({
             ) : (
               <>
                 <Zap className="h-5 w-5 mr-2" />
-                {tradeDirection === "buy" ? "Buy" : "Sell"} {orderType === "market" ? "Market" : "Limit"}
+                {tradeDirection === "buy" ? "Buy" : "Sell"}{" "}
+                {orderType === "market" ? "Market" : "Limit"}
               </>
             )}
           </Button>
@@ -841,7 +929,9 @@ export default function EnhancedTradingInterface({
             <CardContent className="pt-4">
               <div className="flex items-center">
                 <AlertTriangle className="h-5 w-5 text-amber-600 mr-2" />
-                <span className="text-amber-800">Please connect your wallet to start trading</span>
+                <span className="text-amber-800">
+                  Please connect your wallet to start trading
+                </span>
               </div>
             </CardContent>
           </Card>

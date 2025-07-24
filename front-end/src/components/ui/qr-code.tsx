@@ -37,15 +37,14 @@ export const QRCode: React.FC<QRCodeProps> = ({
     }).catch((error) => {
       console.error("QR Code generation failed:", error);
     });
-
   }, [value, size, level, includeMargin]);
 
   if (!value) {
     return (
-      <div 
+      <div
         className={cn(
           "flex items-center justify-center bg-gray-100 rounded-lg",
-          className
+          className,
         )}
         style={{ width: size, height: size }}
       >
