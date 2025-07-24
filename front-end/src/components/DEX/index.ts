@@ -4,3 +4,5 @@ export { default as EnhancedTradingInterface } from "./EnhancedTradingInterface"
 export { default as OrderBook } from "./OrderBook";
 export { default as TradeHistory } from "./TradeHistory";
 export { default as QuickTradingWidget } from "./QuickTradingWidget";
+export { default as StockSelector } from "./StockSelector";
+export { default as MockTradingDemo } from "./MockTradingDemo";

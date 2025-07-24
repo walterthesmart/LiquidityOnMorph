@@ -25,7 +25,7 @@ import {
   Info
 } from "lucide-react";
 import { useAccount, useChainId } from "wagmi";
-import { DEXDashboard, EnhancedTradingInterface, OrderBook, TradeHistory } from "@/components/DEX";
+import { DEXDashboard, EnhancedTradingInterface, OrderBook, TradeHistory, MockTradingDemo } from "@/components/DEX";
 import { WalletStatus } from "@/components/WalletStatus";
 
 // Loading components
@@ -69,7 +69,15 @@ export default function DEXPage() {
           <div className="flex items-center gap-4">
             {/* Network Status */}
             <Badge variant={chainId ? "default" : "destructive"} className="px-3 py-1">
-              {chainId === 11155111 ? "Sepolia" : chainId === 355113 ? "Bitfinity Testnet" : "Unknown Network"}
+              {chainId === 11155111
+                ? "Sepolia"
+                : chainId === 355113
+                ? "Bitfinity Testnet"
+                : chainId === 2810
+                ? "Morph Holesky Testnet"
+                : chainId === 2818
+                ? "Morph Mainnet"
+                : "Unknown Network"}
             </Badge>
 
             {/* Wallet Status */}
@@ -97,10 +105,14 @@ export default function DEXPage() {
 
       {/* Main Trading Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:grid-cols-5">
           <TabsTrigger value="trade" className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
             <span className="hidden sm:inline">Trade</span>
+          </TabsTrigger>
+          <TabsTrigger value="demo" className="flex items-center gap-2">
+            <RefreshCw className="h-4 w-4" />
+            <span className="hidden sm:inline">Demo</span>
           </TabsTrigger>
           <TabsTrigger value="markets" className="flex items-center gap-2">
             <BarChart3 className="h-4 w-4" />
@@ -115,6 +127,13 @@ export default function DEXPage() {
             <span className="hidden sm:inline">Analytics</span>
           </TabsTrigger>
         </TabsList>
+
+        {/* Demo Tab */}
+        <TabsContent value="demo" className="space-y-6">
+          <Suspense fallback={<LoadingCard title="Loading Mock Trading Demo..." />}>
+            <MockTradingDemo />
+          </Suspense>
+        </TabsContent>
 
         {/* Trading Tab */}
         <TabsContent value="trade" className="space-y-6">

@@ -32,7 +32,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { Switch } from "@/components/ui/switch";
 import {
   ArrowUpDown,
@@ -47,7 +47,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
-import { getStockInfoByAddresses, DEXStockInfo, formatStockDisplayName } from "@/utils/dex-stock-mapping";
+import { getStockInfoByAddresses, DEXStockInfo } from "@/utils/dex-stock-mapping";
+import StockSelector from "./StockSelector";
 
 interface EnhancedTradingInterfaceProps {
   className?: string;
@@ -80,7 +81,7 @@ export default function EnhancedTradingInterface({
   const [success, setSuccess] = useState<string | null>(null);
 
   // Enhanced stock information state
-  const [enhancedStockInfo, setEnhancedStockInfo] = useState<DEXStockInfo[]>([]);
+  const [, setEnhancedStockInfo] = useState<DEXStockInfo[]>([]);
   const [selectedStockInfo, setSelectedStockInfo] = useState<DEXStockInfo | null>(null);
   const [stockInfoLoading, setStockInfoLoading] = useState(false);
   const [stockInfoError, setStockInfoError] = useState<string | null>(null);
@@ -496,89 +497,19 @@ export default function EnhancedTradingInterface({
         {/* Stock Selection */}
         <div className="space-y-2">
           <Label htmlFor="stock-select">Select Stock Token</Label>
-          <Select
+          <StockSelector
             value={selectedStock}
             onValueChange={setSelectedStock}
+            placeholder={
+              stockInfoLoading
+                ? "Loading stocks..."
+                : stockInfoError
+                ? "Error loading stocks"
+                : "Choose a stock to trade"
+            }
             disabled={stockInfoLoading || !!stockInfoError}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder={
-                stockInfoLoading
-                  ? "Loading stocks..."
-                  : stockInfoError
-                    ? "Error loading stocks"
-                    : "Choose a stock to trade"
-              }>
-                {selectedStockInfo && !stockInfoLoading && (
-                  <div className="flex items-center gap-2">
-                    <div className="relative w-6 h-6 flex-shrink-0">
-                      <Image
-                        src={selectedStockInfo.logoPath}
-                        alt={selectedStockInfo.logoAlt}
-                        width={24}
-                        height={24}
-                        className="rounded-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/logo/png/logo-no-background.png";
-                        }}
-                      />
-                    </div>
-                    <span className="truncate">
-                      {formatStockDisplayName(selectedStockInfo)}
-                    </span>
-                  </div>
-                )}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {stockInfoLoading ? (
-                <div className="flex items-center justify-center p-4">
-                  <RefreshCw className="h-4 w-4 animate-spin mr-2" />
-                  <span className="text-sm text-muted-foreground">Loading stocks...</span>
-                </div>
-              ) : stockInfoError ? (
-                <div className="flex items-center justify-center p-4">
-                  <AlertTriangle className="h-4 w-4 mr-2 text-yellow-500" />
-                  <span className="text-sm text-muted-foreground">{stockInfoError}</span>
-                </div>
-              ) : enhancedStockInfo.length === 0 ? (
-                <div className="flex items-center justify-center p-4">
-                  <span className="text-sm text-muted-foreground">No stocks available</span>
-                </div>
-              ) : (
-                enhancedStockInfo.map((stockInfo) => (
-                  <SelectItem key={stockInfo.contractAddress} value={stockInfo.contractAddress}>
-                    <div className="flex items-center gap-3 w-full">
-                      <div className="relative w-6 h-6 flex-shrink-0">
-                        <Image
-                          src={stockInfo.logoPath}
-                          alt={stockInfo.logoAlt}
-                          width={24}
-                          height={24}
-                          className="rounded-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/logo/png/logo-no-background.png";
-                          }}
-                        />
-                      </div>
-                      <div className="flex flex-col min-w-0 flex-1">
-                        <span className="font-medium truncate">
-                          {stockInfo.companyName}
-                        </span>
-                        <span className="text-sm text-muted-foreground">
-                          {stockInfo.symbol} • {stockInfo.sector}
-                        </span>
-                      </div>
-                    </div>
-                  </SelectItem>
-                ))
-              )}
-            </SelectContent>
-          </Select>
-
-          {/* Error message display */}
+            useMockData={true}
+          />
           {stockInfoError && (
             <div className="flex items-center gap-2 p-2 bg-yellow-50 border border-yellow-200 rounded-md">
               <AlertTriangle className="h-4 w-4 text-yellow-600" />

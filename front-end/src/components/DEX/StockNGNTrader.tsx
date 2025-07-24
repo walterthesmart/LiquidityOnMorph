@@ -15,6 +15,7 @@ import {
   getNGNStablecoinAddress,
 } from "../../abis";
 import { formatEther, parseEther } from "ethers";
+import StockSelector from "./StockSelector";
 
 interface StockNGNTraderProps {
   className?: string;
@@ -59,7 +60,7 @@ const StockNGNTrader: React.FC<StockNGNTraderProps> = ({ className = "" }) => {
   const ngnAddress = chainId ? getNGNStablecoinAddress(chainId) : "";
 
   // Get all available stock tokens
-  const { data: allStockTokens } = useReadContract({
+  const { data: stockTokens } = useReadContract({
     address: dexAddress as `0x${string}`,
     abi: StockNGNDEXABI,
     functionName: "getAllStockTokens",
@@ -321,18 +322,12 @@ const StockNGNTrader: React.FC<StockNGNTraderProps> = ({ className = "" }) => {
         <label className="block text-sm font-medium text-gray-700 mb-1">
           Select Stock
         </label>
-        <select
+        <StockSelector
           value={selectedStock}
-          onChange={(e) => setSelectedStock(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value="">Choose a stock...</option>
-          {allStockTokens?.map((token) => (
-            <option key={token} value={token}>
-              {token.slice(0, 6)}...{token.slice(-4)}
-            </option>
-          ))}
-        </select>
+          onValueChange={setSelectedStock}
+          placeholder="Choose a stock to trade"
+          useMockData={true}
+        />
       </div>
 
       {/* Stock Info Display */}
