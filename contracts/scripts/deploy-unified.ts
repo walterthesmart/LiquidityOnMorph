@@ -151,6 +151,28 @@ const NETWORK_CONFIGS: Record<string, NetworkConfig> = {
       decimals: 18,
     },
   },
+  morph_holesky: {
+    name: "Morph Holesky Testnet",
+    chainId: 2810,
+    rpcUrl: "https://rpc-quicknode-holesky.morphl2.io",
+    blockExplorer: "https://explorer-holesky.morphl2.io",
+    nativeCurrency: {
+      name: "Ethereum",
+      symbol: "ETH",
+      decimals: 18,
+    },
+  },
+  morph_mainnet: {
+    name: "Morph Mainnet",
+    chainId: 2818,
+    rpcUrl: "https://rpc-quicknode.morphl2.io",
+    blockExplorer: "https://explorer.morphl2.io",
+    nativeCurrency: {
+      name: "Ethereum",
+      symbol: "ETH",
+      decimals: 18,
+    },
+  },
   localhost: {
     name: "Hardhat Local",
     chainId: 31337,
@@ -318,6 +340,91 @@ const CONTRACT_CONFIGS: Record<string, ContractConfig> = {
           marketCap: ethers.parseEther("500000000").toString(), // 500M NGN
         },
       ],
+    },
+  },
+  morph_holesky: {
+    ngnStablecoin: {
+      name: "Nigerian Naira Stablecoin",
+      symbol: "NGN",
+      maxSupply: ethers.parseEther("1000000000").toString(), // 1B NGN
+      mintingCap: ethers.parseEther("10000000").toString(), // 10M NGN daily
+      mintingEnabled: true,
+      burningEnabled: true,
+      transfersEnabled: true,
+    },
+    dex: {
+      defaultFeeRate: 30, // 0.3% fee
+      maxPriceImpact: 500, // 5% max price impact
+      minLiquidity: ethers.parseEther("1000").toString(),
+      swapDeadline: 1800, // 30 minutes
+      emergencyMode: false,
+    },
+    tradingPairManager: {
+      defaultFeeRate: 30,
+      defaultLiquidityTarget: ethers.parseEther("100000").toString(),
+      defaultRebalanceThreshold: 1000,
+      maxPairsPerBatch: 10,
+      autoLiquidityEnabled: true,
+      emergencyWithdrawDelay: 86400, // 24 hours
+    },
+    stockFactory: {
+      deployStockTokens: true, // Deploy stock tokens on Morph
+      stockTokensToCreate: [
+        {
+          name: "Dangote Cement",
+          symbol: "DANGCEM",
+          totalSupply: ethers.parseEther("1000000").toString(),
+          companyName: "Dangote Cement Plc",
+          sector: "Industrial Goods",
+          marketCap: ethers.parseEther("5000000000").toString(), // 5B NGN
+        },
+        {
+          name: "MTN Nigeria",
+          symbol: "MTNN",
+          totalSupply: ethers.parseEther("2000000").toString(),
+          companyName: "MTN Nigeria Communications Plc",
+          sector: "ICT",
+          marketCap: ethers.parseEther("3000000000").toString(), // 3B NGN
+        },
+        {
+          name: "Zenith Bank",
+          symbol: "ZENITHBANK",
+          totalSupply: ethers.parseEther("3000000").toString(),
+          companyName: "Zenith Bank Plc",
+          sector: "Banking",
+          marketCap: ethers.parseEther("1500000000").toString(), // 1.5B NGN
+        },
+      ],
+    },
+  },
+  morph_mainnet: {
+    ngnStablecoin: {
+      name: "Nigerian Naira Stablecoin",
+      symbol: "NGN",
+      maxSupply: ethers.parseEther("1000000000").toString(), // 1B NGN
+      mintingCap: ethers.parseEther("10000000").toString(), // 10M NGN daily
+      mintingEnabled: true,
+      burningEnabled: true,
+      transfersEnabled: true,
+    },
+    dex: {
+      defaultFeeRate: 30, // 0.3% fee
+      maxPriceImpact: 500, // 5% max price impact
+      minLiquidity: ethers.parseEther("1000").toString(),
+      swapDeadline: 1800, // 30 minutes
+      emergencyMode: false,
+    },
+    tradingPairManager: {
+      defaultFeeRate: 30,
+      defaultLiquidityTarget: ethers.parseEther("100000").toString(),
+      defaultRebalanceThreshold: 1000,
+      maxPairsPerBatch: 10,
+      autoLiquidityEnabled: true,
+      emergencyWithdrawDelay: 86400, // 24 hours
+    },
+    stockFactory: {
+      deployStockTokens: false, // Use existing tokens from testnet
+      stockTokensToCreate: [],
     },
   },
 };

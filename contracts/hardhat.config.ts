@@ -54,6 +54,22 @@ const config: HardhatUserConfig = {
       gasPrice: "auto",
       gas: "auto",
     },
+    // Morph Holesky Testnet
+    morph_holesky: {
+      url: process.env.MORPH_HOLESKY_RPC_URL || "https://rpc-quicknode-holesky.morphl2.io",
+      chainId: 2810,
+      accounts: process.env.MORPH_PRIVATE_KEY ? [process.env.MORPH_PRIVATE_KEY] : [],
+      gasPrice: 2000000000, // 2 gwei as recommended by Morph docs
+      gas: "auto",
+    },
+    // Morph Mainnet
+    morph_mainnet: {
+      url: process.env.MORPH_MAINNET_RPC_URL || "https://rpc-quicknode.morphl2.io",
+      chainId: 2818,
+      accounts: process.env.MORPH_PRIVATE_KEY ? [process.env.MORPH_PRIVATE_KEY] : [],
+      gasPrice: 1000000000, // 1 gwei as recommended by Morph docs
+      gas: "auto",
+    },
     // Local development
     hardhat: {
       chainId: 31337,
@@ -74,6 +90,8 @@ const config: HardhatUserConfig = {
       bitfinity_mainnet: "no-api-key-needed",
       sepolia: process.env.ETHERSCAN_API_KEY || "dummy",
       hedera: "no-api-key-needed",
+      morph_holesky: "no-api-key-needed",
+      morph_mainnet: "no-api-key-needed",
     },
     customChains: [
       {
@@ -106,6 +124,22 @@ const config: HardhatUserConfig = {
         urls: {
           apiURL: "https://hashscan.io/testnet/api",
           browserURL: "https://hashscan.io/testnet",
+        },
+      },
+      {
+        network: "morph_holesky",
+        chainId: 2810,
+        urls: {
+          apiURL: "https://explorer-holesky.morphl2.io/api",
+          browserURL: "https://explorer-holesky.morphl2.io",
+        },
+      },
+      {
+        network: "morph_mainnet",
+        chainId: 2818,
+        urls: {
+          apiURL: "https://explorer.morphl2.io/api",
+          browserURL: "https://explorer.morphl2.io",
         },
       },
     ],

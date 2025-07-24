@@ -53,6 +53,30 @@ export const SUPPORTED_NETWORKS: Record<string, NetworkConfig> = {
     },
     testnet: true,
   },
+  morph_holesky: {
+    chainId: 2810,
+    name: "Morph Holesky Testnet",
+    rpcUrl: "https://rpc-quicknode-holesky.morphl2.io",
+    blockExplorer: "https://explorer-holesky.morphl2.io",
+    nativeCurrency: {
+      name: "Ethereum",
+      symbol: "ETH",
+      decimals: 18,
+    },
+    testnet: true,
+  },
+  morph_mainnet: {
+    chainId: 2818,
+    name: "Morph Mainnet",
+    rpcUrl: "https://rpc-quicknode.morphl2.io",
+    blockExplorer: "https://explorer.morphl2.io",
+    nativeCurrency: {
+      name: "Ethereum",
+      symbol: "ETH",
+      decimals: 18,
+    },
+    testnet: false,
+  },
 };
 
 // Backward compatibility
@@ -61,7 +85,7 @@ export const BITFINITY_NETWORKS = {
   mainnet: SUPPORTED_NETWORKS.bitfinity_mainnet,
 };
 
-export const DEFAULT_NETWORK = "bitfinity_testnet";
+export const DEFAULT_NETWORK = "morph_holesky";
 
 /**
  * Contract addresses (to be updated after deployment)

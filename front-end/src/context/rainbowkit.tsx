@@ -17,7 +17,7 @@ import {
   base,
   sepolia,
 } from "wagmi/chains";
-import { bitfinityTestnet, bitfinityMainnet } from "@/config";
+import { bitfinityTestnet, bitfinityMainnet, morphHolesky, morphMainnet } from "@/config";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -30,9 +30,12 @@ const config = getDefaultConfig({
     process.env.NEXT_PUBLIC_PROJECT_ID || "b56e18d47c72ab683b10814fe9495694",
   chains: [
     // Primary networks for Nigerian stock trading
+    morphHolesky,
+    morphMainnet,
+    sepolia, // Ethereum Sepolia testnet for additional testing
+    // Legacy Bitfinity networks (keeping for backward compatibility)
     bitfinityTestnet,
     bitfinityMainnet,
-    sepolia, // Ethereum Sepolia testnet for additional testing
     // Popular EVM chains for broader wallet support
     mainnet,
     polygon,

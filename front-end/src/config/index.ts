@@ -73,6 +73,63 @@ export const bitfinityMainnet = {
   iconBackground: "#fff",
 } as const;
 
+// Define Morph custom chains
+export const morphHolesky = {
+  id: 2810,
+  name: "Morph Holesky Testnet",
+  network: "morph-holesky",
+  nativeCurrency: {
+    decimals: 18,
+    name: "ETH",
+    symbol: "ETH",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc-quicknode-holesky.morphl2.io"],
+    },
+    public: {
+      http: ["https://rpc-quicknode-holesky.morphl2.io"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Morph Holesky Explorer",
+      url: "https://explorer-holesky.morphl2.io",
+    },
+  },
+  testnet: true,
+  iconUrl: "/logo/png/MORPH.png",
+  iconBackground: "#fff",
+} as const;
+
+export const morphMainnet = {
+  id: 2818,
+  name: "Morph Mainnet",
+  network: "morph-mainnet",
+  nativeCurrency: {
+    decimals: 18,
+    name: "ETH",
+    symbol: "ETH",
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc-quicknode.morphl2.io"],
+    },
+    public: {
+      http: ["https://rpc-quicknode.morphl2.io"],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: "Morph Explorer",
+      url: "https://explorer.morphl2.io",
+    },
+  },
+  testnet: false,
+  iconUrl: "/logo/png/MORPH.png",
+  iconBackground: "#fff",
+} as const;
+
 // Legacy RainbowKit configuration - now replaced by the main configuration in rainbowkit.tsx
 // This config is kept for reference but the active configuration includes Bitfinity EVM networks
 
@@ -81,9 +138,12 @@ export const config: ReturnType<typeof getDefaultConfig> = getDefaultConfig({
   projectId,
   chains: [
     // Primary networks for Nigerian stock trading
+    morphHolesky,
+    morphMainnet,
+    sepolia, // Ethereum Sepolia testnet for additional testing
+    // Legacy Bitfinity networks (keeping for backward compatibility)
     bitfinityTestnet,
     bitfinityMainnet,
-    sepolia, // Ethereum Sepolia testnet for additional testing
     // Include popular chains for broader wallet support
     mainnet,
     polygon,
