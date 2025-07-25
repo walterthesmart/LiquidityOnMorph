@@ -1,42 +1,54 @@
 
-# Liquidity - Nigerian Stock Trading Platform 🇳🇬
+# Liquidity - Nigerian Stock Trading Platform on Morph 🇳🇬
 
-Liquidity is a decentralized stock trading platform that allows users to trade tokenized stocks from the Nigerian Stock Exchange (NGX) across multiple blockchain networks. The platform provides a seamless experience for Nigerian investors to buy and sell blue-chip stock tokens with modern DeFi capabilities.
+Liquidity is a decentralized stock trading platform built on **Morph blockchain** that allows users to trade tokenized stocks from the Nigerian Stock Exchange (NGX). The platform leverages Morph's high-performance Layer 2 infrastructure to provide a seamless, low-cost experience for Nigerian investors to buy and sell blue-chip stock tokens with modern DeFi capabilities.
 
-## 🌐 Multi-Network Support
+## 🌐 Morph Blockchain Integration
 
-The platform now supports multiple blockchain networks for enhanced testing and broader ecosystem compatibility:
+The platform is specifically optimized for Morph's Layer 2 ecosystem, providing:
 
 ### Primary Networks
-- **Bitfinity EVM Testnet** (Chain ID: 355113) - Primary development and testing network
-- **Bitfinity EVM Mainnet** (Chain ID: 355110) - Production network for live trading
-- **Ethereum Sepolia Testnet** (Chain ID: 11155111) - Additional testing environment
+- **Morph Holesky Testnet** (Chain ID: 2810) - Primary development and testing network
+- **Morph Mainnet** (Chain ID: 2818) - Production network for live trading
 
-### Legacy Support
-- **Hedera Hashgraph** - Original implementation with HTS tokens
+### Additional Network Support
+- **Ethereum Sepolia Testnet** (Chain ID: 11155111) - Cross-chain testing environment
+- **Bitfinity EVM** - Alternative EVM compatibility testing
+- **Hedera Hashgraph** - Legacy implementation support
 
-This multi-network architecture enables comprehensive testing, cross-chain compatibility, and provides users with multiple options for accessing Nigerian stock tokens.
+### Why Morph?
+- **Ultra-Low Fees**: Significantly reduced transaction costs compared to Ethereum mainnet
+- **High Throughput**: Fast transaction processing for seamless trading experience
+- **EVM Compatibility**: Full Ethereum compatibility with enhanced performance
+- **Decentralized Sequencer**: Enhanced security and decentralization
+- **Optimistic Rollup**: Proven Layer 2 scaling solution
 
 ## 🚀 Key Features
 
-### Multi-Network Capabilities
-- **Bitfinity EVM Integration**: Fast, secure, and low-cost transactions on ICP-based EVM
-- **Ethereum Sepolia Support**: Additional testing environment with Ethereum ecosystem compatibility
-- **Network Switching**: Seamless switching between supported networks
-- **Cross-Network Testing**: Comprehensive testing across multiple EVM environments
+### Morph-Optimized Capabilities
+- **Morph Layer 2 Integration**: Ultra-fast, low-cost transactions on Morph's optimistic rollup
+- **Decentralized Trading**: Fully decentralized stock token trading with Morph's security guarantees
+- **Cross-Chain Compatibility**: Seamless bridging between Morph and Ethereum mainnet
+- **Gas Optimization**: Smart contract optimizations specifically for Morph's fee structure
 
-### Core Features
-- **Tokenized NGX Stocks**: Access to major Nigerian companies like Dangote Cement, MTN Nigeria, Zenith Bank
-- **Multiple Wallet Support**: MetaMask, WalletConnect, and other EVM-compatible wallets
-- **Real-time Price Updates**: Live NGX stock prices and market data
-- **Nigerian Payment Methods**: Paystack integration with cards, bank transfers, USSD
-- **Portfolio Management**: Track your Nigerian stock holdings across networks
-- **Security Features**: Advanced rate limiting, blacklisting, and emergency controls
+### Core Trading Features
+- **Tokenized NGX Stocks**: Access to 30+ major Nigerian companies including Dangote Cement, MTN Nigeria, Zenith Bank
+- **NGN Stablecoin**: Native Nigerian Naira stablecoin for seamless local currency trading
+- **Automated Market Making**: Built-in DEX with automated liquidity provision
+- **Real-time Price Feeds**: Live NGX stock prices and market data integration
+- **Portfolio Management**: Comprehensive tracking of Nigerian stock holdings on Morph
 
-### Developer Features
-- **Multi-Network Deployment**: Deploy contracts to Bitfinity EVM and Ethereum Sepolia
-- **Network Utilities**: Balance checking, faucet integration, and network detection
-- **Comprehensive Testing**: Automated testing across all supported networks
+### DeFi Integration
+- **StockNGNDEX**: Native decentralized exchange for stock tokens
+- **Liquidity Pools**: Earn fees by providing liquidity to stock/NGN trading pairs
+- **Yield Farming**: Stake tokens to earn additional rewards
+- **Trading Pair Management**: Automated rebalancing and liquidity optimization
+
+### Security & Compliance
+- **OpenZeppelin Standards**: Industry-standard security patterns and upgradeable contracts
+- **Rate Limiting**: Advanced protection against spam and manipulation
+- **Emergency Controls**: Circuit breakers and pause mechanisms for security
+- **Role-Based Access**: Granular permissions for different user types
 
 ## 📈 Supported Nigerian Stocks
 
@@ -67,31 +79,57 @@ This multi-network architecture enables comprehensive testing, cross-chain compa
 
 ## 🛠 Technology Stack
 
+### Blockchain Infrastructure
+- **Primary Blockchain**: Morph Layer 2 (Optimistic Rollup)
+- **Smart Contracts**: Solidity 0.8.24 with OpenZeppelin standards
+- **Development Framework**: Hardhat with TypeScript
+- **Contract Verification**: Morph Explorer integration
+
+### Frontend & Backend
 - **Frontend**: Next.js 14 with TypeScript (Strict Mode)
-- **Blockchain**: Hedera Hashgraph (Testnet/Mainnet)
-- **Smart Contracts**: Solidity with Hedera Token Service (HTS)
-- **Database**: MongoDB with Nigerian stock data
-- **Authentication**: Clerk
-- **Payments**: Paystack (Nigerian payment processor)
-- **Styling**: Tailwind CSS
-- **Security**: OpenZeppelin contracts with custom enhancements
+- **Wallet Integration**: RainbowKit with wagmi for Morph connectivity
+- **Database**: MongoDB with Nigerian stock market data
+- **Authentication**: Clerk for user management
+- **Styling**: Tailwind CSS with responsive design
+
+### DeFi & Trading
+- **DEX Protocol**: Custom StockNGNDEX with automated market making
+- **Token Standards**: ERC-20 compliant stock tokens and NGN stablecoin
+- **Liquidity Management**: Automated trading pair management
+- **Price Oracles**: Real-time NGX price feed integration
+
+### Payments & Integration
+- **Nigerian Payments**: Paystack integration (cards, bank transfers, USSD)
+- **Cross-Chain**: Morph-Ethereum bridge compatibility
+- **Security**: Advanced rate limiting, emergency controls, and role-based access
 
 ## 🏗 Architecture
 
-### Smart Contract Layer
-- **NigerianStockToken.sol**: Main contract for stock tokenization
-- **SecurityEnhancements.sol**: Advanced security patterns
-- **Hedera Token Service**: Native token creation and management
+### Smart Contract Layer (Morph)
+- **NGNStablecoin.sol**: Nigerian Naira stablecoin with minting controls
+- **NigerianStockTokenFactory.sol**: Factory for deploying stock tokens
+- **StockNGNDEX.sol**: Decentralized exchange for stock/NGN trading
+- **TradingPairManager.sol**: Automated liquidity and pair management
+- **NigerianStockToken.sol**: Individual stock token contracts with metadata
+
+### DeFi Protocol Components
+- **Automated Market Making**: Constant product formula with price impact protection
+- **Liquidity Pools**: Stock/NGN trading pairs with fee collection
+- **Yield Farming**: Staking rewards for liquidity providers
+- **Price Oracle Integration**: Real-time NGX price feeds
 
 ### Backend Services
-- **Nigerian Stock Price Service**: Real-time NGX price fetching
-- **Payment Service**: Paystack integration for Naira payments
-- **Hedera SDK**: Blockchain interaction utilities
+- **Morph RPC Integration**: Direct blockchain interaction via Morph nodes
+- **Nigerian Stock Price Service**: Real-time NGX market data fetching
+- **Payment Service**: Paystack integration for Naira on/off ramps
+- **Cross-Chain Bridge**: Morph-Ethereum asset bridging support
 
 ### Frontend Components
-- **Hedera Wallet Manager**: Multi-wallet connection support
-- **Stock Trading Interface**: Buy/sell Nigerian stocks
-- **Portfolio Dashboard**: Track holdings and performance
+- **Morph Wallet Manager**: RainbowKit integration for Morph network
+- **DEX Trading Interface**: Swap stocks for NGN with slippage protection
+- **Liquidity Management**: Add/remove liquidity from trading pairs
+- **Portfolio Dashboard**: Real-time holdings and P&L tracking
+- **Bridge Interface**: Cross-chain asset transfers
 
 ## 🚀 Getting Started
 
@@ -99,83 +137,107 @@ This multi-network architecture enables comprehensive testing, cross-chain compa
 
 - Node.js 18+
 - MongoDB
-- Hedera Testnet Account
-- Paystack Account (for payments)
-- Supported Hedera wallet (HashPack, Blade, Kabila, or MetaMask)
+- Morph-compatible wallet (MetaMask, WalletConnect, etc.)
+- Morph Holesky testnet ETH for gas fees
+- Paystack Account (for Nigerian payment integration)
+- Git for version control
 
 ### Installation
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/your-username/Liquidity.git
-cd Liquidity
+git clone https://github.com/your-username/LiquidityOnMorph.git
+cd LiquidityOnMorph
 ```
 
 2. **Install frontend dependencies:**
 ```bash
-cd site
+cd front-end
 npm install
 ```
 
 3. **Install contract dependencies:**
 ```bash
-cd ../contracts/hedera
+cd ../contracts
 npm install
 ```
 
 4. **Set up environment variables:**
 ```bash
-cd ../../site
+# For contracts
+cd contracts
+cp .env.example .env
+
+# For frontend
+cd ../front-end
 cp .env.example .env.local
 ```
 
-5. **Configure your environment variables in `.env.local`:**
+5. **Configure your environment variables:**
+
+**For contracts (`.env`):**
+```env
+# Morph Configuration
+MORPH_PRIVATE_KEY=your_morph_private_key_here
+MORPH_HOLESKY_RPC_URL=https://rpc-quicknode-holesky.morphl2.io
+MORPH_MAINNET_RPC_URL=https://rpc-quicknode.morphl2.io
+
+# Additional Networks (for testing)
+SEPOLIA_PRIVATE_KEY=your_sepolia_private_key_here
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/your_infura_project_id
+ETHERSCAN_API_KEY=your_etherscan_api_key_here
+```
+
+**For frontend (`.env.local`):**
 ```env
 # Database
-CONN_STRING=mongodb://localhost:27017/Liquidity
+CONN_STRING=mongodb://localhost:27017/LiquidityMorph
 
 # Clerk Authentication
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
 CLERK_SECRET_KEY=your_clerk_secret_key
 
-# Hedera Configuration
-NEXT_PUBLIC_HEDERA_NETWORK=testnet
-NEXT_PUBLIC_HEDERA_OPERATOR_ID=0.0.YOUR_ACCOUNT_ID
-HEDERA_OPERATOR_KEY=your_private_key
-NEXT_PUBLIC_HEDERA_CONTRACT_ID=0.0.CONTRACT_ID
+# Morph Network Configuration
+NEXT_PUBLIC_MORPH_HOLESKY_RPC_URL=https://rpc-quicknode-holesky.morphl2.io
+NEXT_PUBLIC_MORPH_MAINNET_RPC_URL=https://rpc-quicknode.morphl2.io
+NEXT_PUBLIC_MORPH_HOLESKY_CHAIN_ID=2810
+NEXT_PUBLIC_MORPH_MAINNET_CHAIN_ID=2818
 
-# Hedera URLs
-NEXT_PUBLIC_HEDERA_TESTNET_RPC_URL=https://testnet.hashio.io/api
-NEXT_PUBLIC_HEDERA_TESTNET_MIRROR_URL=https://testnet.mirrornode.hedera.com
+# Contract Addresses (update after deployment)
+NEXT_PUBLIC_NGN_STABLECOIN_ADDRESS=your_ngn_contract_address
+NEXT_PUBLIC_STOCK_FACTORY_ADDRESS=your_factory_contract_address
+NEXT_PUBLIC_DEX_ADDRESS=your_dex_contract_address
 
 # Paystack (Nigerian Payments)
 PAYSTACK_URL=https://api.paystack.co
 TEST_PAYSTACK_SECRET_KEY=sk_test_your_paystack_secret_key
 LIVE_PAYSTACK_SECRET_KEY=sk_live_your_paystack_secret_key
-
-# WhatsApp Notifications (Optional)
-WHATSAPP_TOKEN=your_whatsapp_token
-WHATSAPP_PHONE_ID=your_phone_id
-NOTIFIER_NUMBER=your_notification_number
 ```
 
-6. **Run database migration:**
-```bash
-npm run migrate:nigerian-stocks
-```
+6. **Add Morph network to your wallet:**
+   - Network Name: Morph Holesky Testnet
+   - RPC URL: https://rpc-quicknode-holesky.morphl2.io
+   - Chain ID: 2810
+   - Currency Symbol: ETH
+   - Block Explorer: https://explorer-holesky.morphl2.io
 
-7. **Start the development server:**
+7. **Get testnet ETH:**
+   - Use Morph faucet or bridge ETH from Ethereum Sepolia
+   - Visit: https://bridge-holesky.morphl2.io
+
+8. **Start the development server:**
 ```bash
+cd front-end
 npm run dev
 ```
 
-## 📝 Smart Contract Deployment
+## 📝 Smart Contract Deployment on Morph
 
-### Deploy to Hedera Testnet
+### Deploy to Morph Holesky Testnet
 
 1. **Navigate to contracts directory:**
 ```bash
-cd contracts/hedera
+cd contracts
 ```
 
 2. **Compile contracts:**
@@ -183,94 +245,88 @@ cd contracts/hedera
 npm run compile
 ```
 
-3. **Deploy to Hedera Testnet:**
+3. **Deploy to Morph Holesky:**
 ```bash
-npm run deploy:testnet
+npx hardhat run scripts/deploy-morph.ts --network morph_holesky
 ```
 
-4. **Update environment variables with deployed contract address**
-
-### Deploy to Hedera Mainnet
-
+4. **Verify contracts on Morph Explorer:**
 ```bash
-npm run deploy:mainnet
+npx hardhat verify --network morph_holesky <CONTRACT_ADDRESS>
 ```
 
-## 🌐 Multi-Network EVM Deployment
-
-The platform now supports deployment to multiple EVM-compatible networks. Follow these instructions for Bitfinity EVM and Ethereum Sepolia deployments.
-
-### Prerequisites for EVM Deployment
-
-1. **Install EVM contract dependencies:**
-```bash
-cd contracts  # or backend for alternative setup
-npm install
-```
-
-2. **Set up environment variables:**
-```bash
-cp .env.example .env
-```
-
-3. **Configure your `.env` file:**
-```env
-# Bitfinity EVM Configuration
-BITFINITY_PRIVATE_KEY=your_bitfinity_private_key_here
-BITFINITY_API_KEY=your_bitfinity_api_key_here
-
-# Ethereum Sepolia Configuration
-SEPOLIA_PRIVATE_KEY=your_sepolia_private_key_here
-SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/your_infura_project_id
-ETHERSCAN_API_KEY=your_etherscan_api_key_here
-```
-
-### Deploy to Bitfinity EVM Testnet
+### Deploy to Morph Mainnet
 
 ```bash
-# Compile contracts
-npm run compile
-
-# Deploy to Bitfinity Testnet
-npm run deploy:testnet
-
-# Verify contracts (optional)
-npm run verify:testnet
+npx hardhat run scripts/deploy-morph.ts --network morph_mainnet
 ```
 
-### Deploy to Ethereum Sepolia
+## 🌉 Cross-Chain Deployment & Utilities
+
+The platform supports deployment across multiple networks with Morph as the primary chain.
+
+### Morph-Specific Deployment Features
+
+1. **Optimized Gas Usage:**
+```bash
+# Deploy with Morph-optimized gas settings
+npx hardhat run scripts/deploy-morph.ts --network morph_holesky
+```
+
+2. **Contract Verification:**
+```bash
+# Verify on Morph Explorer
+npx hardhat verify --network morph_holesky <CONTRACT_ADDRESS> <CONSTRUCTOR_ARGS>
+```
+
+3. **Morph Bridge Integration:**
+```bash
+# Test cross-chain functionality
+npx hardhat run scripts/test-morph-bridge.ts --network morph_holesky
+```
+
+### Multi-Network Testing
 
 ```bash
-# Check Sepolia ETH balance first
-cd ../scripts
-node sepolia-eth-utils.js --address YOUR_ADDRESS --action balance
-
-# Get Sepolia ETH from faucets if needed
-node sepolia-eth-utils.js --action faucet
-
-# Deploy to Sepolia
-cd ../contracts
+# Deploy to Ethereum Sepolia for cross-chain testing
 npm run deploy:sepolia
 
-# Test deployment
-npx hardhat run scripts/test-sepolia-deployment.ts --network sepolia
+# Deploy NGN DEX system to multiple networks
+npm run deploy:ngn-dex:testnet  # Morph Holesky
+npm run deploy:ngn-dex:sepolia  # Ethereum Sepolia
+
+# Test cross-chain compatibility
+npm run test:deployment:morph
+npm run test:deployment:sepolia
 ```
 
 ### Network Utilities
 
 ```bash
-cd scripts
+# Check Morph network status
+npx hardhat run scripts/check-morph-network.ts --network morph_holesky
 
-# Check balances across networks
-npm run balance:sepolia -- --address YOUR_ADDRESS
-node mint-bft-tokens.js --action balance --network bitfinity_testnet --address YOUR_ADDRESS
+# Monitor gas prices across networks
+npx hardhat run scripts/gas-monitor.ts
 
-# Get faucet information
-npm run faucet:sepolia
-node mint-bft-tokens.js --action faucet --network sepolia
+# Bridge assets between Ethereum and Morph
+npx hardhat run scripts/bridge-assets.ts --network morph_holesky
 
-# Mint BFT tokens (Bitfinity only)
-node mint-bft-tokens.js --network bitfinity_testnet --address YOUR_ADDRESS --amount 10
+# Create trading pairs on Morph
+npm run create-pairs:morph
+```
+
+### Morph Faucet & Testing
+
+```bash
+# Get Morph testnet ETH
+# Visit: https://bridge-holesky.morphl2.io
+
+# Mint test NGN tokens
+npx hardhat run scripts/mint-ngn.ts --network morph_holesky
+
+# Test DEX functionality
+npm run test:ngn-dex:morph
 ```
 
 ## 🔧 API Endpoints
@@ -332,35 +388,59 @@ const purchaseResponse = await fetch('/api/nigerian-stocks', {
 All major Nigerian banks are supported including:
 - Access Bank, First Bank, GTBank, Zenith Bank, UBA, Stanbic IBTC, and more
 
-## 📱 Wallet Integration
+## 📱 Morph Wallet Integration
 
 ### Supported Wallets
 
-The application uses RainbowKit for wallet connectivity, supporting all major EVM wallets including:
+The application uses RainbowKit optimized for Morph network connectivity:
 
-1. **MetaMask** - Most popular Ethereum wallet
-2. **WalletConnect** - Connect with mobile wallets
-3. **Coinbase Wallet** - Coinbase's native wallet
-4. **Rainbow Wallet** - Mobile-first Ethereum wallet
-5. **And many more** - RainbowKit supports 100+ wallets
+1. **MetaMask** - Add Morph network manually or via our integration
+2. **WalletConnect** - Connect mobile wallets with Morph support
+3. **Coinbase Wallet** - Full Morph network compatibility
+4. **Rainbow Wallet** - Native Morph support
+5. **Trust Wallet** - Mobile wallet with Morph integration
+6. **And 100+ more** - RainbowKit supports all major EVM wallets
 
-### Wallet Connection
+### Morph Network Auto-Configuration
 
 ```javascript
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 
-function WalletConnection() {
+function MorphWalletConnection() {
   const { isConnected, address } = useAccount();
+  const { chain } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
+
+  const switchToMorph = () => {
+    switchNetwork?.(2810); // Morph Holesky testnet
+  };
 
   return (
     <div>
       <ConnectButton />
-      {isConnected && <p>Connected: {address}</p>}
+      {isConnected && (
+        <div>
+          <p>Connected: {address}</p>
+          {chain?.id !== 2810 && (
+            <button onClick={switchToMorph}>
+              Switch to Morph Network
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }
 ```
+
+### Morph Network Configuration
+
+The app automatically configures Morph network settings:
+- **Chain ID**: 2810 (Holesky) / 2818 (Mainnet)
+- **RPC URL**: Optimized Morph endpoints
+- **Block Explorer**: Morph Explorer integration
+- **Gas Settings**: Morph-optimized gas estimation
 
 ## 🧪 Testing
 
@@ -368,45 +448,103 @@ function WalletConnection() {
 
 ```bash
 # Frontend tests
-cd site
+cd front-end
 npm test
 
 # Smart contract tests
-cd contracts/hedera
+cd contracts
 npm test
+
+# Morph-specific tests
+npm run test:morph
+
+# Cross-chain integration tests
+npm run test:cross-chain
 ```
 
 ### Test Coverage
 
 ```bash
-npm run coverage
+# Generate coverage report
+npm run test:coverage
+
+# Coverage for Morph deployments
+npm run coverage:morph
 ```
 
-## 🚀 Deployment
+### Morph Network Testing
+
+```bash
+# Test Morph Holesky deployment
+npx hardhat test --network morph_holesky
+
+# Test gas optimization on Morph
+npm run test:gas:morph
+
+# Test bridge functionality
+npm run test:bridge:morph
+```
+
+## 🚀 Production Deployment
 
 ### Frontend Deployment (Vercel)
 
-1. Connect your GitHub repository to Vercel
-2. Set environment variables in Vercel dashboard
-3. Deploy automatically on push to main branch
+1. **Connect repository to Vercel**
+2. **Configure environment variables:**
+   ```env
+   # Morph Mainnet Configuration
+   NEXT_PUBLIC_MORPH_MAINNET_RPC_URL=https://rpc-quicknode.morphl2.io
+   NEXT_PUBLIC_MORPH_MAINNET_CHAIN_ID=2818
 
-### Smart Contract Deployment
+   # Production contract addresses
+   NEXT_PUBLIC_NGN_STABLECOIN_ADDRESS=0x...
+   NEXT_PUBLIC_STOCK_FACTORY_ADDRESS=0x...
+   NEXT_PUBLIC_DEX_ADDRESS=0x...
+   ```
+3. **Deploy automatically on push to main branch**
 
-Contracts are deployed to Hedera Testnet/Mainnet using the deployment scripts.
+### Smart Contract Deployment to Morph Mainnet
 
-## 📊 Monitoring
+```bash
+# Deploy to Morph Mainnet
+npx hardhat run scripts/deploy-morph.ts --network morph_mainnet
 
-### Market Data
+# Verify contracts
+npx hardhat verify --network morph_mainnet <CONTRACT_ADDRESS>
 
-- Real-time NGX stock prices
-- Market statistics and trends
-- Trading volume and market cap
+# Initialize trading pairs
+npm run create-pairs:mainnet
+```
 
-### Transaction Monitoring
+### Production Monitoring
 
-- Payment status tracking
-- Blockchain transaction monitoring
-- Error logging and alerting
+- **Morph Explorer**: https://explorer.morphl2.io
+- **Contract Verification**: Automatic via Hardhat
+- **Gas Optimization**: Morph's low-cost transactions
+- **Uptime Monitoring**: Morph's high availability
+
+## 📊 Monitoring & Analytics
+
+### Market Data on Morph
+
+- **Real-time NGX Prices**: Live stock price feeds integrated with Morph
+- **Trading Volume**: Track volume across all stock/NGN pairs
+- **Liquidity Metrics**: Monitor pool depths and utilization
+- **Market Statistics**: Comprehensive market cap and trend analysis
+
+### Morph Network Monitoring
+
+- **Transaction Costs**: Ultra-low fees compared to Ethereum mainnet
+- **Block Confirmation**: Fast finality with Morph's optimistic rollup
+- **Network Health**: Real-time Morph network status monitoring
+- **Bridge Activity**: Cross-chain asset movement tracking
+
+### DeFi Analytics
+
+- **DEX Performance**: Trading volume, fees collected, and slippage metrics
+- **Liquidity Pools**: APY tracking and impermanent loss calculations
+- **Yield Farming**: Staking rewards and distribution analytics
+- **User Activity**: Active traders and liquidity providers on Morph
 
 ## 🤝 Contributing
 
@@ -418,10 +556,12 @@ Contracts are deployed to Hedera Testnet/Mainnet using the deployment scripts.
 
 ### Development Guidelines
 
-- Follow TypeScript strict mode
-- Write comprehensive tests
-- Update documentation
-- Follow security best practices
+- **TypeScript Strict Mode**: Maintain type safety across the codebase
+- **Morph Optimization**: Optimize contracts for Morph's gas model
+- **Comprehensive Testing**: Test on both Morph Holesky and mainnet
+- **Security Best Practices**: Follow OpenZeppelin standards
+- **Cross-Chain Compatibility**: Ensure bridge functionality works correctly
+- **Documentation**: Update docs for Morph-specific features
 
 ## 📄 License
 
@@ -435,13 +575,31 @@ For support and questions:
 - Contact the development team
 - Check the documentation
 
-## 🔗 Links
+## 🔗 Important Links
 
-- [Hedera Hashgraph](https://hedera.com)
+### Morph Blockchain
+- [Morph Official Website](https://morphl2.io)
+- [Morph Documentation](https://docs.morphl2.io)
+- [Morph Holesky Explorer](https://explorer-holesky.morphl2.io)
+- [Morph Mainnet Explorer](https://explorer.morphl2.io)
+- [Morph Bridge](https://bridge-holesky.morphl2.io)
+
+### Nigerian Financial Markets
 - [Nigerian Stock Exchange](https://ngxgroup.com)
-- [Paystack](https://paystack.com)
+- [Central Bank of Nigeria](https://cbn.gov.ng)
+- [Securities and Exchange Commission](https://sec.gov.ng)
+
+### Development Tools
+- [Paystack](https://paystack.com) - Nigerian payment processor
 - [Next.js Documentation](https://nextjs.org/docs)
+- [Hardhat](https://hardhat.org) - Ethereum development environment
+- [OpenZeppelin](https://openzeppelin.com) - Smart contract security
+
+### Community & Support
+- [Morph Discord](https://discord.gg/morphl2)
+- [GitHub Repository](https://github.com/your-username/LiquidityOnMorph)
+- [Project Documentation](./docs/)
 
 ---
 
-**Made with ❤️ for Nigerian investors**
+**Made with ❤️ for Nigerian investors on Morph blockchain**
